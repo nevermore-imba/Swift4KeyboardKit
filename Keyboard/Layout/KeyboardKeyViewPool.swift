@@ -14,7 +14,7 @@ public final class KeyboardKeyViewPool {
 
     private var viewsBySize: [CGSize: [KeyViewAndKeyTypeTuple]] = [:]
 
-    public func store(keyView keyView: KeyboardKeyView, keyType: KeyboardKeyType) {
+    public func store(keyView: KeyboardKeyView, keyType: KeyboardKeyType) {
         let size = keyView.frame.size
 
         if self.viewsBySize[size] == nil {
@@ -24,7 +24,7 @@ public final class KeyboardKeyViewPool {
         self.viewsBySize[size]!.append((keyView: keyView, keyType: keyType))
     }
 
-    public func restore(size size: CGSize, keyType: KeyboardKeyType) -> KeyboardKeyView? {
+    public func restore(size: CGSize, keyType: KeyboardKeyType) -> KeyboardKeyView? {
         guard var tuples = self.viewsBySize[size] else {
             return nil
         }
@@ -33,8 +33,8 @@ public final class KeyboardKeyViewPool {
             let tuple = tuples[i]
             if tuple.keyType == keyType {
                 // TODO: REWRITE IT!
-                self.viewsBySize[size]!.removeAtIndex(i)
-                tuples.removeAtIndex(i)
+                self.viewsBySize[size]?.remove(at: i)
+                tuples.remove(at: i)
                 /*
                 if tuples.count == 0 {
                     self.viewsBySize.removeValueForKey(size)
@@ -48,9 +48,7 @@ public final class KeyboardKeyViewPool {
     }
 
     public var keyViews: [KeyboardKeyView] {
-        return Array(self.viewsBySize.values.flatten().map { (tuple: KeyViewAndKeyTypeTuple) in
-            return tuple.keyView
-        })
+        return Array(self.viewsBySize.values.joined().map(\.keyView))
     }
 
 }

@@ -13,19 +13,19 @@ public final class KeyboardKeyEnabledShiftSymbolView: KeyboardKeyDrawableSymbolV
     override public func draw() {
         let color = self.tintColor
         let shiftEnabledPath = UIBezierPath()
-        shiftEnabledPath.moveToPoint(CGPoint(x: 0, y: -10))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: 9.75, y: -0.25))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: 4.25, y: -0.25))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: 4.25, y: 7.75))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: -4.25, y: 7.75))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: -4.25, y: -0.25))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: -9.75, y: -0.25))
-        shiftEnabledPath.addLineToPoint(CGPoint(x: 0, y: -10))
-        shiftEnabledPath.closePath()
-        shiftEnabledPath.lineJoinStyle = .Bevel
-        color.setFill()
+        shiftEnabledPath.move(to: CGPoint(x: 0, y: -10))
+        shiftEnabledPath.addLine(to: CGPoint(x: 9.75, y: -0.25))
+        shiftEnabledPath.addLine(to: CGPoint(x: 4.25, y: -0.25))
+        shiftEnabledPath.addLine(to: CGPoint(x: 4.25, y: 7.75))
+        shiftEnabledPath.addLine(to: CGPoint(x: -4.25, y: 7.75))
+        shiftEnabledPath.addLine(to: CGPoint(x: -4.25, y: -0.25))
+        shiftEnabledPath.addLine(to: CGPoint(x: -9.75, y: -0.25))
+        shiftEnabledPath.addLine(to: CGPoint(x: 0, y: -10))
+        shiftEnabledPath.close()
+        shiftEnabledPath.lineJoinStyle = .bevel
+        color?.setFill()
         shiftEnabledPath.fill()
-        color.setStroke()
+        color?.setStroke()
         shiftEnabledPath.lineWidth = 1.5
         shiftEnabledPath.stroke()
     }

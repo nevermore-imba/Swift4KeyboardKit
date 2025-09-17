@@ -10,42 +10,34 @@ import Foundation
 
 
 private var waitTimerToken: Int = 0
-private let longWaitTimerInterval: NSTimeInterval = 0.2
-private let veryLongwaitTimerInterval: NSTimeInterval = 1.5
+private let longWaitTimerInterval: TimeInterval = 0.2
+private let veryLongwaitTimerInterval: TimeInterval = 1.5
 
 
-extension UIControlEvents {
-    public static var TouchDownLong: UIControlEvents = UIControlEvents(rawValue: 0x04000000)
-    public static var TouchDownVeryLong: UIControlEvents = UIControlEvents(rawValue: 0x08000000)
+extension UIControl.Event {
+    public static var TouchDownLong = Self(rawValue: 0x04000000)
+    public static var TouchDownVeryLong = Self(rawValue: 0x08000000)
 }
 
 
 public protocol KeyboardKeyListenerProtocol: AnyObject {
-    func keyViewDidSendEvent(event: KeyboardKeyEvent)
+    func keyViewDidSendEvent(_ event: KeyboardKeyEvent)
     // Temporary!
-    func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode)
+    func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode)
 }
 
 
 extension Equatable where Self: KeyboardKeyListenerProtocol {
 }
 
-public func ==(lhs: KeyboardKeyListenerProtocol, rhs: KeyboardKeyListenerProtocol) -> Bool {
-    return unsafeAddressOf(lhs) == unsafeAddressOf(rhs)
+public func == (lhs: KeyboardKeyListenerProtocol, rhs: KeyboardKeyListenerProtocol) -> Bool {
+    return lhs === rhs
 }
-
-
-extension Hashable where Self: KeyboardKeyListenerProtocol {
-    public var hashValue: Int {
-        return unsafeAddressOf(self).hashValue
-    }
-}
-
 
 extension KeyboardKeyListenerProtocol {
 
     // Temporary!
-    public func keyViewDidSendEvent(event: KeyboardKeyEvent) {
+    public func keyViewDidSendEvent(_ event: KeyboardKeyEvent) {
         self.keyViewDidSendEvents(
             event.controlEvents,
             keyView: event.keyView,
@@ -54,7 +46,7 @@ extension KeyboardKeyListenerProtocol {
         )
     }
 
-    public func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {}
+    public func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {}
 
     // # Long Tap
     private var waitTimerCounter: Int {
@@ -73,13 +65,13 @@ extension KeyboardKeyListenerProtocol {
     public func waitForLongTapEvent(event: KeyboardKeyEvent) {
         let controlEvents = event.controlEvents
 
-        if [.TouchDown].contains(controlEvents) {
+        if [.touchDown].contains(controlEvents) {
             self.invalidateWaitTimer()
 
             let capturedWaitTimerCounter = waitTimerCounter
             let capturedEvent = event
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(longWaitTimerInterval * NSTimeInterval(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + longWaitTimerInterval) { [weak self] in
                 guard capturedWaitTimerCounter == self?.waitTimerCounter else {
                     return
                 }
@@ -96,12 +88,12 @@ extension KeyboardKeyListenerProtocol {
                 )
             }
 
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(veryLongwaitTimerInterval * NSTimeInterval(NSEC_PER_SEC))), dispatch_get_main_queue()) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + veryLongwaitTimerInterval) { [weak self] in
                 guard capturedWaitTimerCounter == self?.waitTimerCounter else {
                     return
                 }
 
-                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+                DispatchQueue.main.async { [weak self] in
                     self?.keyViewDidSendEvent(
                         KeyboardKeyEvent(
                             controlEvents: .TouchDownVeryLong, //capturedEvent.controlEvents.union(.TouchDownVeryLong),
@@ -112,10 +104,10 @@ extension KeyboardKeyListenerProtocol {
                             keyboardViewController: capturedEvent.keyboardViewController
                         )
                     )
-                    })
+                }
             }
         }
-        else if [.TouchDragExit, .TouchCancel, .TouchUpInside, .TouchUpOutside, .TouchDragOutside].contains(controlEvents) {
+        else if [.touchDragExit, .touchCancel, .touchUpInside, .touchUpOutside, .touchDragOutside].contains(controlEvents) {
             self.invalidateWaitTimer()
         }
     }

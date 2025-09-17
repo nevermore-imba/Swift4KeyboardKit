@@ -70,17 +70,17 @@ public final class LayoutConstants: NSObject {
     class var popupTotalHeightArray: [CGFloat] { get { return [102, 108] }}
     class var popupTotalHeightDeviceWidthThreshholds: [CGFloat] { get { return [350] }}
 
-    class func sideEdgesPortrait(width: CGFloat) -> CGFloat {
+    class func sideEdgesPortrait(_ width: CGFloat) -> CGFloat {
         return self.findThreshhold(self.sideEdgesPortraitArray, threshholds: self.sideEdgesPortraitWidthThreshholds, measurement: width)
     }
-    class func topEdgePortrait(width: CGFloat) -> CGFloat {
+    class func topEdgePortrait(_ width: CGFloat) -> CGFloat {
         return self.findThreshhold(self.topEdgePortraitArray, threshholds: self.topEdgePortraitWidthThreshholds, measurement: width)
     }
-    class func rowGapPortrait(width: CGFloat) -> CGFloat {
+    class func rowGapPortrait(_ width: CGFloat) -> CGFloat {
         return self.findThreshhold(self.rowGapPortraitArray, threshholds: self.rowGapPortraitThreshholds, measurement: width)
     }
 
-    class func rowGapPortraitLastRow(width: CGFloat) -> CGFloat {
+    class func rowGapPortraitLastRow(_ width: CGFloat) -> CGFloat {
         let index = self.findThreshholdIndex(self.rowGapPortraitThreshholds, measurement: width)
         if index == self.rowGapPortraitLastRowIndex {
             return self.rowGapPortraitLastRow
@@ -90,7 +90,7 @@ public final class LayoutConstants: NSObject {
         }
     }
 
-    class func keyGapPortrait(width: CGFloat, rowCharacterCount: Int) -> CGFloat {
+    class func keyGapPortrait(_ width: CGFloat, rowCharacterCount: Int) -> CGFloat {
         let compressed = (rowCharacterCount >= self.keyCompressedThreshhold)
         if compressed {
             if width >= self.keyGapPortraitUncompressThreshhold {
@@ -104,7 +104,7 @@ public final class LayoutConstants: NSObject {
             return self.keyGapPortraitNormal
         }
     }
-    class func keyGapLandscape(width: CGFloat, rowCharacterCount: Int) -> CGFloat {
+    class func keyGapLandscape(_ width: CGFloat, rowCharacterCount: Int) -> CGFloat {
         let compressed = (rowCharacterCount >= self.keyCompressedThreshhold)
         let shrunk = self.keyboardIsShrunk(width)
         if compressed || shrunk {
@@ -115,16 +115,16 @@ public final class LayoutConstants: NSObject {
         }
     }
 
-    class func lastRowKeyGapLandscape(width: CGFloat) -> CGFloat {
+    class func lastRowKeyGapLandscape(_ width: CGFloat) -> CGFloat {
         return self.findThreshhold(self.lastRowKeyGapLandscapeArray, threshholds: self.lastRowKeyGapLandscapeWidthThreshholds, measurement: width)
     }
 
-    class func keyboardIsShrunk(width: CGFloat) -> Bool {
-        let isPad = UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+    class func keyboardIsShrunk(_ width: CGFloat) -> Bool {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
         return (isPad ? false : width >= self.keyboardShrunkSizeBaseWidthThreshhold)
     }
-    class func keyboardShrunkSize(width: CGFloat) -> CGFloat {
-        let isPad = UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+    class func keyboardShrunkSize(_ width: CGFloat) -> CGFloat {
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
         if isPad {
             return width
         }
@@ -141,12 +141,13 @@ public final class LayoutConstants: NSObject {
         return self.findThreshhold(self.popupTotalHeightArray, threshholds: self.popupTotalHeightDeviceWidthThreshholds, measurement: deviceWidth)
     }
 
-    class func findThreshhold(elements: [CGFloat], threshholds: [CGFloat], measurement: CGFloat) -> CGFloat {
+    class func findThreshhold(_ elements: [CGFloat], threshholds: [CGFloat], measurement: CGFloat) -> CGFloat {
         assert(elements.count == threshholds.count + 1, "elements and threshholds do not match")
         return elements[self.findThreshholdIndex(threshholds, measurement: measurement)]
     }
-    class func findThreshholdIndex(threshholds: [CGFloat], measurement: CGFloat) -> Int {
-        for (i, threshhold) in Array(threshholds.reverse()).enumerate() {
+    
+    class func findThreshholdIndex(_ threshholds: [CGFloat], measurement: CGFloat) -> Int {
+        for (i, threshhold) in Array(threshholds.reversed()).enumerated() {
             if measurement >= threshhold {
                 let actualIndex = threshholds.count - i
                 return actualIndex

@@ -11,44 +11,51 @@ import UIKit
 
 private var storedInputViewControllers = WeakSet<UIInputViewController>()
 private weak var storedInputViewController: UIInputViewController?
-private var dispatchOnceToken: dispatch_once_t = 0
 
 
-func swizzleInit() {
-    let type = UIViewController.self // Yes, `UIViewController`, not `UIInputViewController`.
-    let originalMethod = class_getInstanceMethod(type, Selector("initWithNibName:bundle:"))
+private func swizzleInit() {
 
-    let swizzledImplementation: @convention(c) (NSObject, Selector, AnyObject, AnyObject) -> Unmanaged<AnyObject>! = { (_self, _cmd, nibName, bundle) in
+    let target = UIViewController.self // Yes, `UIViewController`, not `UIInputViewController`.
+
+    guard let originalMethod = class_getInstanceMethod(target, #selector(UIViewController.init(nibName:bundle:))) else { return }
+
+    let action = Selector(("originalInitWithNibName:bundle:"))
+
+    let swizzledImplementation: @convention(block) (NSObject, Selector, AnyObject, AnyObject) -> Unmanaged<AnyObject>? = { (_self, _cmd, nibName, bundle) in
         if let inputViewController = _self as? UIInputViewController {
             storedInputViewController = inputViewController
             storedInputViewControllers.insert(inputViewController)
         }
-
-        return _self.performSelector("originalInitWithNibName:bundle:", withObject: nibName, withObject: bundle)
+        return _self.perform(action, with: nibName, with: bundle)
     }
 
     let originalImplementation =
         method_setImplementation(
             originalMethod,
-            unsafeBitCast(swizzledImplementation, IMP.self)
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
     )
 
     class_addMethod(
-        type,
-        "originalInitWithNibName:bundle:",
+        target,
+        action,
         originalImplementation,
         method_getTypeEncoding(originalMethod)
     )
 }
 
 
-func swizzleSendEvent() {
+private func swizzleSendEvent() {
     let type = UIApplication.self
-    let originalMethod = class_getInstanceMethod(type, Selector("sendEvent:"))
+    let action = Selector(("originalSendEvent:"))
 
-    let swizzledImplementation: @convention(c) (UIApplication, Selector, UIEvent) -> Unmanaged<AnyObject>! = { (_self, _cmd, event) in
-        if let view = event.allTouches()?.first?.view {
-            if let rootViewController = view.window?.rootViewController?.childViewControllers.first as? UIInputViewController {
+    guard let originalMethod = class_getInstanceMethod(type, #selector(UIApplication.sendEvent(_:))) else {
+        return
+    }
+
+    let swizzledImplementation: @convention(block) (UIApplication, Selector, UIEvent) -> Unmanaged<AnyObject>? = { _self, _cmd, event in
+
+        if let view = event.allTouches?.first?.view {
+            if let rootViewController = view.window?.rootViewController?.children.first as? UIInputViewController {
                 if storedInputViewController != rootViewController {
                     storedInputViewController = rootViewController
                     log("🙀🔥 `UIInputViewController.rootInputViewController` was recovered.")
@@ -56,18 +63,18 @@ func swizzleSendEvent() {
             }
         }
 
-        return _self.performSelector("originalSendEvent:", withObject: event)
+        return _self.perform(action, with: event)
     }
 
     let originalImplementation =
         method_setImplementation(
             originalMethod,
-            unsafeBitCast(swizzledImplementation, IMP.self)
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
     )
 
     class_addMethod(
         type,
-        "originalSendEvent:",
+        action,
         originalImplementation,
         method_getTypeEncoding(originalMethod)
     )
@@ -76,8 +83,9 @@ func swizzleSendEvent() {
 
 extension UIInputViewController {
 
-    public override class func initialize() {
-        dispatch_once(&dispatchOnceToken) {
+
+    public class func swizzling() {
+        _DispatchOnce.run {
             swizzleInit()
             swizzleSendEvent()
         }

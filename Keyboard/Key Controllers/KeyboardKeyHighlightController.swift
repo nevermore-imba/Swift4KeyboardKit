@@ -11,23 +11,23 @@ import Foundation
 
 internal final class KeyboardKeyHighlightController: KeyboardKeyListenerProtocol {
 
-    let highlightOnEvents: UIControlEvents = [.TouchDown, .TouchDragInside, .TouchDragEnter]
-    let highlightOffEvents: UIControlEvents = [.TouchDragExit, .TouchCancel, .TouchUpInside, .TouchUpOutside, .TouchDragOutside]
+    let highlightOnEvents: UIControl.Event = [.touchDown, .touchDragInside, .touchDragEnter]
+    let highlightOffEvents: UIControl.Event = [.touchDragExit, .touchCancel, .touchUpInside, .touchUpOutside, .touchDragOutside]
 
-    internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    internal func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         let appearance = keyView.appearance
 
         guard appearance.shouldHighlight else {
             return
         }
 
-        if !controlEvents.intersect(highlightOnEvents).isEmpty {
+        if !controlEvents.intersection(highlightOnEvents).isEmpty {
             keyView.keyMode.highlightMode = .Highlighted
             keyView.updateIfNeeded()
             return
         }
 
-        if !controlEvents.intersect(highlightOffEvents).isEmpty {
+        if !controlEvents.intersection(highlightOffEvents).isEmpty {
             keyView.keyMode.highlightMode = .None
             keyView.updateIfNeeded()
             return

@@ -11,20 +11,20 @@ import Foundation
 
 public struct KeyboardKeyAppearance {
     // # Keycap
-    public var keycapBodyColor: UIColor = UIColor.lightGrayColor()
-    public var keycapTextColor: UIColor = UIColor.blackColor()
-    public var keycapOuterShadowColor: UIColor = UIColor.darkGrayColor()
-    public var keycapBorderColor: UIColor = UIColor.blackColor()
+    public var keycapBodyColor: UIColor = UIColor.lightGray
+    public var keycapTextColor: UIColor = UIColor.black
+    public var keycapOuterShadowColor: UIColor = UIColor.darkGray
+    public var keycapBorderColor: UIColor = UIColor.black
     public var keycapBorderSize: CGFloat = 0
 
     // # Popup
-    public var popupBodyColor: UIColor = UIColor.lightGrayColor()
-    public var popupTextColor: UIColor = UIColor.blackColor()
-    public var popupOuterShadowColor: UIColor = UIColor.darkGrayColor()
-    public var popupBorderColor: UIColor = UIColor.blackColor()
+    public var popupBodyColor: UIColor = UIColor.lightGray
+    public var popupTextColor: UIColor = UIColor.black
+    public var popupOuterShadowColor: UIColor = UIColor.darkGray
+    public var popupBorderColor: UIColor = UIColor.black
     public var popupBorderSize: CGFloat = 0
-    public var popupHighlightedBackgroundColor: UIColor = UIColor.blackColor()
-    public var popupHighlightedTextColor: UIColor = UIColor.lightGrayColor()
+    public var popupHighlightedBackgroundColor: UIColor = UIColor.black
+    public var popupHighlightedTextColor: UIColor = UIColor.lightGray
 
     // # Font sizes
     public var keycapTextFont = UIFont(name: "HelveticaNeue", size: 16)

@@ -8,40 +8,45 @@
 
 import Foundation
 
-internal let cachedNewLineCharacterSet = NSCharacterSet.newlineCharacterSet()
-internal let cachedWhitespaceCharacterSet = NSCharacterSet.whitespaceCharacterSet()
+internal let cachedNewLineCharacterSet = CharacterSet.newlines
+internal let cachedWhitespaceCharacterSet = CharacterSet.whitespaces
 
-internal let cachedLowercaseLetterCharacterSet = NSCharacterSet.lowercaseLetterCharacterSet()
-internal let cachedUppercaseLetterCharacterSet = NSCharacterSet.uppercaseLetterCharacterSet()
-internal let cachedLetterCharacterSet = NSCharacterSet.letterCharacterSet()
-internal let cachedNonLetterCharacterSet = cachedLetterCharacterSet.invertedSet
+internal let cachedLowercaseLetterCharacterSet = CharacterSet.lowercaseLetters
+internal let cachedUppercaseLetterCharacterSet = CharacterSet.uppercaseLetters
+internal let cachedLetterCharacterSet = CharacterSet.letters
+internal let cachedNonLetterCharacterSet = cachedLetterCharacterSet.inverted
 
-internal let cachedSeparatorChracterSet: NSCharacterSet = {
-    var characterSet = NSMutableCharacterSet()
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.whitespaceCharacterSet())
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.newlineCharacterSet())
-    characterSet.formUnionWithCharacterSet(NSCharacterSet.punctuationCharacterSet())
+internal let cachedSeparatorChracterSet: CharacterSet = {
+    var characterSet = CharacterSet()
+    characterSet.formUnion(.whitespaces)
+    characterSet.formUnion(.newlines)
+    characterSet.formUnion(.punctuationCharacters)
     return characterSet
 } ()
 
-internal let cachedEndOfSentenceChracterSet: NSCharacterSet = {
-    return NSCharacterSet(charactersInString: ".?!")
+internal let cachedEndOfSentenceChracterSet: CharacterSet = {
+    return CharacterSet(charactersIn: ".?!")
 } ()
 
-internal let cachedEndOfSentenceAndNewLineChracterSet: NSCharacterSet = {
-    var characterSet = NSMutableCharacterSet()
-    characterSet.formUnionWithCharacterSet(cachedEndOfSentenceChracterSet)
-    characterSet.formUnionWithCharacterSet(cachedNewLineCharacterSet)
+internal let cachedEndOfSentenceAndNewLineChracterSet: CharacterSet = {
+    var characterSet = CharacterSet()
+    characterSet.formUnion(cachedEndOfSentenceChracterSet)
+    characterSet.formUnion(cachedNewLineCharacterSet)
     return characterSet
 } ()
 
 
-extension NSCharacterSet {
-    static func separatorChracterSet() -> NSCharacterSet {
+extension CharacterSet {
+
+    func characterIsMember(_ aCharacter: unichar) -> Bool {
+        return (self as NSCharacterSet).characterIsMember(aCharacter)
+    }
+
+    static func separatorChracterSet() -> CharacterSet {
         return cachedSeparatorChracterSet
     }
 
-    static func endOfSentenceChracterSet() -> NSCharacterSet {
+    static func endOfSentenceChracterSet() -> CharacterSet {
         return cachedEndOfSentenceChracterSet
     }
 }

@@ -22,23 +22,23 @@ internal final class KeyboardKeyViewSet {
         return Array(self.keysByView.values)
     }
 
-    internal func insert(key: KeyboardKey, keyView: KeyboardKeyView) {
+    internal func insert(_ key: KeyboardKey, keyView: KeyboardKeyView) {
         self.viewsByKey[key] = keyView
         self.keysByView[keyView] = key
         self.touch()
     }
 
     internal func remove(key: KeyboardKey) {
-        let keyView = self.viewsByKey[key]!
-        self.viewsByKey.removeValueForKey(key)
-        self.keysByView.removeValueForKey(keyView)
+        guard let keyView = self.viewsByKey[key] else { return }
+        self.viewsByKey.removeValue(forKey: key)
+        self.keysByView.removeValue(forKey: keyView)
         self.touch()
     }
 
     internal func remove(keyView: KeyboardKeyView) {
-        let key = self.keysByView[keyView]!
-        self.viewsByKey.removeValueForKey(key)
-        self.keysByView.removeValueForKey(keyView)
+        guard let key = self.keysByView[keyView] else { return }
+        self.viewsByKey.removeValue(forKey: key)
+        self.keysByView.removeValue(forKey: keyView)
         self.touch()
     }
 
@@ -48,11 +48,11 @@ internal final class KeyboardKeyViewSet {
         self.touch()
     }
 
-    internal func viewByKey(key: KeyboardKey) -> KeyboardKeyView? {
+    internal func viewByKey(_ key: KeyboardKey) -> KeyboardKeyView? {
         return self.viewsByKey[key]
     }
 
-    internal func keyByView(keyView: KeyboardKeyView) -> KeyboardKey? {
+    internal func keyByView(_ keyView: KeyboardKeyView) -> KeyboardKey? {
         return self.keysByView[keyView]
     }
 
@@ -63,33 +63,33 @@ internal final class KeyboardKeyViewSet {
 }
 
 
-extension KeyboardKeyViewSet: SequenceType {
-    internal func generate() -> DictionaryGenerator<KeyboardKey, KeyboardKeyView> {
-        return self.viewsByKey.generate()
+extension KeyboardKeyViewSet: Sequence {
+
+    internal func makeIterator() -> Dictionary<KeyboardKey, KeyboardKeyView>.Iterator {
+        return self.viewsByKey.makeIterator()
     }
+
 }
 
 
 extension KeyboardKeyViewSet: Hashable {
-    internal var hashValue: Int {
-        return self.internalHashValue
+
+    internal static func == (lhs: KeyboardKeyViewSet, rhs: KeyboardKeyViewSet) -> Bool {
+        return
+            lhs.viewsByKey == rhs.viewsByKey &&
+            lhs.keysByView == rhs.keysByView
+    }
+
+    internal func hash(into hasher: inout Hasher) {
+        hasher.combine(viewsByKey)
+        hasher.combine(keysByView)
+        hasher.combine(internalHashValue)
     }
 }
 
-
-extension KeyboardKeyViewSet: Equatable {
-}
-
-internal func == (lhs: KeyboardKeyViewSet, rhs: KeyboardKeyViewSet) -> Bool {
-    return
-        lhs.viewsByKey == rhs.viewsByKey &&
-        lhs.keysByView == rhs.keysByView
-}
-
-
 extension KeyboardKeyViewPool {
 
-    internal func storeSet(keyViewSet: KeyboardKeyViewSet) {
+    internal func storeSet(_ keyViewSet: KeyboardKeyViewSet) {
         for (key, keyView) in keyViewSet {
             self.store(keyView: keyView, keyType: key.type)
         }

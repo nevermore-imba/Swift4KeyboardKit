@@ -17,7 +17,7 @@ internal final class KeyboardEmojiCollectionViewLayout: UICollectionViewFlowLayo
         self.itemSize = CGSize(width: 40.0, height: 40.0)
         self.minimumLineSpacing = 4.0
         self.minimumInteritemSpacing = 4.0
-        self.scrollDirection = .Horizontal
+        self.scrollDirection = .horizontal
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -112,7 +112,6 @@
 		A78320FB1C7FD6C20099C307 /* KeyboardSuggestionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319EE1C7FD6BE0099C307 /* KeyboardSuggestionKey.swift */; };
 		A78320FC1C7FD6C20099C307 /* KeyboardSuggestionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319EF1C7FD6BE0099C307 /* KeyboardSuggestionModel.swift */; };
 		A78320FD1C7FD6C20099C307 /* KeyboardSuggestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F01C7FD6BE0099C307 /* KeyboardSuggestionsViewController.swift */; };
-		A78320FE1C7FD6C20099C307 /* UIApplication+sharedKeyboardApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F21C7FD6BE0099C307 /* UIApplication+sharedKeyboardApplication.swift */; };
 		A78320FF1C7FD6C20099C307 /* UIInputViewController+rootInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F31C7FD6BE0099C307 /* UIInputViewController+rootInputViewController.swift */; };
 		A78321001C7FD6C20099C307 /* UIResponder+firstResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */; };
 		A78327211C7FD6C30099C307 /* package.json in Resources */ = {isa = PBXBuildFile; fileRef = A78320AD1C7FD6C20099C307 /* package.json */; };
@@ -120,7 +119,7 @@
 		A78327231C7FD6C30099C307 /* CGPoint+Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78320B01C7FD6C20099C307 /* CGPoint+Math.swift */; };
 		A78327241C7FD6C30099C307 /* CGRect+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78320B11C7FD6C20099C307 /* CGRect+Hashable.swift */; };
 		A78327251C7FD6C30099C307 /* CGSize+Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78320B21C7FD6C20099C307 /* CGSize+Hashable.swift */; };
-		A78327261C7FD6C30099C307 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78320B31C7FD6C20099C307 /* WeakSet.swift */; };
+		A78327261C7FD6C30099C307 /* WeakBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78320B31C7FD6C20099C307 /* WeakBox.swift */; };
 		A78327281C7FD6F00099C307 /* emojis.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F81C7FD6BE0099C307 /* emojis.swift */; };
 		A783272C1C7FD9BD0099C307 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A783272B1C7FD9BD0099C307 /* KeyboardView.swift */; };
 		A783272D1C7FD9D90099C307 /* emojiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78319F71C7FD6BE0099C307 /* emojiData.swift */; };
@@ -172,7 +171,7 @@
 		A7E4C56E1C84CCDD006AF488 /* KeyboardStandardTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E4C56D1C84CCDD006AF488 /* KeyboardStandardTheme.swift */; };
 		A7E814421C9B84E9003B4B3C /* klingonKeyboardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E814411C9B84E8003B4B3C /* klingonKeyboardLayout.swift */; };
 		A7FA0ABE1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA0ABD1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift */; };
-		A7FCC15E1CD41E8900008EC7 /* WeakBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */; };
+		F6A4C5452E7A9CF000B5B3B2 /* DispatchOnce.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A4C5442E7A9CF000B5B3B2 /* DispatchOnce.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -276,7 +275,6 @@
 		A78319EE1C7FD6BE0099C307 /* KeyboardSuggestionKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSuggestionKey.swift; sourceTree = "<group>"; };
 		A78319EF1C7FD6BE0099C307 /* KeyboardSuggestionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = KeyboardSuggestionModel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A78319F01C7FD6BE0099C307 /* KeyboardSuggestionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardSuggestionsViewController.swift; sourceTree = "<group>"; };
-		A78319F21C7FD6BE0099C307 /* UIApplication+sharedKeyboardApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+sharedKeyboardApplication.swift"; sourceTree = "<group>"; };
 		A78319F31C7FD6BE0099C307 /* UIInputViewController+rootInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIInputViewController+rootInputViewController.swift"; sourceTree = "<group>"; };
 		A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIResponder+firstResponder.swift"; sourceTree = "<group>"; };
 		A78319F61C7FD6BE0099C307 /* emoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
@@ -288,7 +286,7 @@
 		A78320B01C7FD6C20099C307 /* CGPoint+Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Math.swift"; sourceTree = "<group>"; };
 		A78320B11C7FD6C20099C307 /* CGRect+Hashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Hashable.swift"; sourceTree = "<group>"; };
 		A78320B21C7FD6C20099C307 /* CGSize+Hashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+Hashable.swift"; sourceTree = "<group>"; };
-		A78320B31C7FD6C20099C307 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
+		A78320B31C7FD6C20099C307 /* WeakBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakBox.swift; sourceTree = "<group>"; };
 		A783272B1C7FD9BD0099C307 /* KeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		A787A8A51C84D9D400588D01 /* KeyboardStructuredTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardStructuredTheme.swift; sourceTree = "<group>"; };
 		A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = isKeyboardExtensionEnabled.swift; sourceTree = "<group>"; };
@@ -345,7 +343,7 @@
 		A7E4C56D1C84CCDD006AF488 /* KeyboardStandardTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardStandardTheme.swift; sourceTree = "<group>"; };
 		A7E814411C9B84E8003B4B3C /* klingonKeyboardLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = klingonKeyboardLayout.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A7FA0ABD1C90B82700C3EC2D /* KeyboardAlternateKeyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardAlternateKeyView.swift; sourceTree = "<group>"; };
-		A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakBox.swift; sourceTree = "<group>"; };
+		F6A4C5442E7A9CF000B5B3B2 /* DispatchOnce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchOnce.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -645,15 +643,14 @@
 				A7CF9BAC1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift */,
 				A70C94101D1A1E7D00B132E6 /* String+cases.swift */,
 				A722DB231C8E44E700804C5C /* String+trim.swift */,
-				A78319F21C7FD6BE0099C307 /* UIApplication+sharedKeyboardApplication.swift */,
 				A78319F31C7FD6BE0099C307 /* UIInputViewController+rootInputViewController.swift */,
 				A78319F41C7FD6BE0099C307 /* UIResponder+firstResponder.swift */,
-				A7FCC15D1CD41E8900008EC7 /* WeakBox.swift */,
-				A78320B31C7FD6C20099C307 /* WeakSet.swift */,
+				A78320B31C7FD6C20099C307 /* WeakBox.swift */,
 				A7D196591CEBAEB300C8E056 /* isKeyboardExtensionContext.swift */,
 				A797EBDC1CEA6E3F0024E023 /* isKeyboardExtensionEnabled.swift */,
 				A70B41291CE3CB2F00C80054 /* log.swift */,
 				A797EBDE1CEA75B60024E023 /* openSettingsAppWithKeyboards.swift */,
+				F6A4C5442E7A9CF000B5B3B2 /* DispatchOnce.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -990,7 +987,8 @@
 		A752657C1C459B83002355AF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1620;
 				ORGANIZATIONNAME = AnchorFree;
 				TargetAttributes = {
 					A75265841C459B83002355AF = {
@@ -1000,10 +998,11 @@
 			};
 			buildConfigurationList = A752657F1C459B83002355AF /* Build configuration list for PBXProject "KeyboardKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = A752657B1C459B83002355AF;
 			productRefGroup = A75265861C459B83002355AF /* Products */;
@@ -1092,7 +1091,7 @@
 				A78320F31C7FD6C20099C307 /* KeyboardShiftController.swift in Sources */,
 				A78320D51C7FD6C20099C307 /* KeyboardKeyBackspaceSymbolView.swift in Sources */,
 				A7CF9BAD1CC6FFFA0085A700 /* NSCharacterSet+AdditionalSets.swift in Sources */,
-				A78327261C7FD6C30099C307 /* WeakSet.swift in Sources */,
+				A78327261C7FD6C30099C307 /* WeakBox.swift in Sources */,
 				A71288FA1D1221DD00346F99 /* KeyboardSuggestionModel+aggregation.swift in Sources */,
 				A73A91BE1CFF5952009A09AD /* KeyboardEmojiViewControllerDelegate.swift in Sources */,
 				A78320E41C7FD6C20099C307 /* KeyboardKeyCompoundModificationMode.swift in Sources */,
@@ -1123,10 +1122,8 @@
 				A797F1DB1CADD963005CB9CD /* latinAlternateCharactersMap.swift in Sources */,
 				A797F1FD1CADF30F005CB9CD /* germanQwertzKeyboardLayout.swift in Sources */,
 				A7D30DB51C9B5F7B0010F36E /* KeyboardKeyEvent.swift in Sources */,
-				A78320FE1C7FD6C20099C307 /* UIApplication+sharedKeyboardApplication.swift in Sources */,
 				A78320FB1C7FD6C20099C307 /* KeyboardSuggestionKey.swift in Sources */,
 				A78320EA1C7FD6C20099C307 /* KeyboardKeyPopupMode.swift in Sources */,
-				A7FCC15E1CD41E8900008EC7 /* WeakBox.swift in Sources */,
 				A728ADCE1CBC2936002093F1 /* KeyboardSuggestionGuessesSortingModel.swift in Sources */,
 				A797F1E41CADDA91005CB9CD /* frenchQwertyKeyboardLayout.swift in Sources */,
 				A78320CB1C7FD6C20099C307 /* KeyboardKeyShape.swift in Sources */,
@@ -1170,6 +1167,7 @@
 				A7512D501C8A30D8008A25C7 /* commonStandardKeyboardKeys.swift in Sources */,
 				A728ADCD1CBC2936002093F1 /* KeyboardSpellingSuggestionSource.swift in Sources */,
 				A7E814421C9B84E9003B4B3C /* klingonKeyboardLayout.swift in Sources */,
+				F6A4C5452E7A9CF000B5B3B2 /* DispatchOnce.swift in Sources */,
 				A70C94001D18CA4700B132E6 /* KeyboardKeyDrawableSymbolView.swift in Sources */,
 				A78320E61C7FD6C20099C307 /* KeyboardKeyHighlightController.swift in Sources */,
 				A78320C91C7FD6C20099C307 /* KeyboardEmojiViewController.swift in Sources */,
@@ -1209,22 +1207,33 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1239,11 +1248,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1259,22 +1267,33 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1283,10 +1302,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1298,18 +1317,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anchorfree.KeyboardKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1317,18 +1342,24 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anchorfree.KeyboardKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

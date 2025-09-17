@@ -24,9 +24,9 @@ public final class KeyboardSpaceKeyContentView: KeyboardKeyContentView {
 
         self.pageControlView = KeyboardSpaceKeyPageControlView()
         self.pageControlView.transform = CGAffineTransformMakeScale(0.5, 0.5);
-//        self.pageControlView.pageIndicatorTintColor = UIColor.blackColor()
-//        self.pageControlView.currentPageIndicatorTintColor = UIColor.whiteColor()
-//        self.pageControlView.backgroundColor = UIColor.brownColor()
+//        self.pageControlView.pageIndicatorTintColor = UIColor.black
+//        self.pageControlView.currentPageIndicatorTintColor = UIColor.white
+//        self.pageControlView.backgroundColor = UIColor.brown
         self.addSubview(self.pageControlView)
     }
     
@@ -37,7 +37,7 @@ public final class KeyboardSpaceKeyContentView: KeyboardKeyContentView {
     override public var appearance: KeyboardKeyAppearance {
         didSet {
             let color = self.appearance.keycapTextColor
-            self.pageControlView.pageIndicatorTintColor = color.colorWithAlphaComponent(0.2)
+            self.pageControlView.pageIndicatorTintColor = color.withAlphaComponent(0.2)
             self.pageControlView.currentPageIndicatorTintColor = color
 
             self.labelView.font = appearance.keycapTextFont
@@ -61,7 +61,8 @@ public final class KeyboardSpaceKeyContentView: KeyboardKeyContentView {
 
 
 extension KeyboardSpaceKeyContentView {
-    public override func copyWithZone(zone: NSZone) -> AnyObject {
+
+    public override func copy(with zone: NSZone? = nil) -> Any {
         // TODO: Add required init
         //let contentView = self.dynamicType.init(frame: self.frame)
         let contentView = KeyboardSpaceKeyContentView(frame: self.frame)
@@ -76,7 +77,7 @@ extension KeyboardSpaceKeyContentView {
 
 public final class KeyboardSpaceKeyPageControlView: UIPageControl {
 
-    public override func sizeForNumberOfPages(pageCount: Int) -> CGSize {
+    public override func size(forNumberOfPages pageCount: Int) -> CGSize {
         return CGSize(width: pageCount * 30, height: 10)
     }
 

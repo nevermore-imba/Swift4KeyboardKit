@@ -11,13 +11,13 @@ import Foundation
 
 extension String {
     internal var unify: String {
-        return self.lowercaseString
+        return self.lowercased()
     }
 
     internal var simplify: String {
         return self
-            .stringByReplacingOccurrencesOfString("'", withString: "")
-            .stringByReplacingOccurrencesOfString(" ", withString: "")
+            .replacingOccurrences(of: "'", with: "")
+            .replacingOccurrences(of: " ", with: "")
     }
 }
 
@@ -54,8 +54,8 @@ internal final class KeyboardSuggestionGuessesSortingModel {
         self.keyViewSetHashValue = keyViewSet.hashValue
     }
 
-    private func keyStreamForString(string: String) -> KeyboardSuggestionKeyStream {
-        let keys: [KeyboardSuggestionKey?] = string.simplify.characters.map { character in
+    private func keyStreamForString(_ string: String) -> KeyboardSuggestionKeyStream {
+        let keys: [KeyboardSuggestionKey?] = string.simplify.map { character in
             let output = String(character).unify
             return self.keyTable[output]
         }
@@ -67,7 +67,7 @@ internal final class KeyboardSuggestionGuessesSortingModel {
         )
     }
 
-    internal func sortReplacements(replacements: [String], placement: String) -> [String] {
+    internal func sortReplacements(_ replacements: [String], placement: String) -> [String] {
         self.updateKeysIfNeeded()
 
         let sourceStream = self.keyStreamForString(placement)
@@ -75,7 +75,8 @@ internal final class KeyboardSuggestionGuessesSortingModel {
 
         let sourceKeys = sourceStream.keys
 
-        for (index, guessStream) in guesseStreams.enumerate() {
+        for (index, guessStream) in guesseStreams.enumerated() {
+
             if guessStream.keys.count != sourceKeys.count {
                 continue
             }
@@ -101,9 +102,7 @@ internal final class KeyboardSuggestionGuessesSortingModel {
             guesseStreams[index].score = Double(distance)
         }
 
-        guesseStreams.sortInPlace { (left, right) -> Bool in
-            left.score < right.score
-        }
+        guesseStreams.sort { $0.score < $1.score }
 
         return guesseStreams.map { $0.source }
     }

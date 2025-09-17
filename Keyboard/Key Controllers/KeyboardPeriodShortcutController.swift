@@ -13,18 +13,18 @@ private let timeIntervalBetweenSpacesThreshold = 0.7
 
 internal class KeyboardPeriodShortcutController: KeyboardKeyListenerProtocol {
     var numberConsequencesSpaces: Int = 0
-    var lastSpacePressedTime: NSTimeInterval?
+    var lastSpacePressedTime: TimeInterval?
 
-    static let sentenceEndingSet: NSCharacterSet = {
-        let characterSet = NSMutableCharacterSet.letterCharacterSet()
-        characterSet.addCharactersInString("\"'`?!.%])}>")
+    static let sentenceEndingSet: CharacterSet = {
+        var characterSet = CharacterSet.letters
+        characterSet.insert(charactersIn: "\"'`?!.%])}>")
         return characterSet
     } ()
 
-    internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    internal func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         var shouldInsertPeriod = false
 
-        if controlEvents.contains(.TouchUpInside) {
+        if controlEvents.contains(.touchUpInside) {
             let now = NSDate().timeIntervalSince1970
 
             if key.type == .Space {
@@ -44,22 +44,24 @@ internal class KeyboardPeriodShortcutController: KeyboardKeyListenerProtocol {
 
             let documentContextBeforeInput = textDocumentProxy.documentContextBeforeInput ?? ""
 
-            guard documentContextBeforeInput.characters.count >= 3 else {
+            guard documentContextBeforeInput.count >= 3 else {
                 return
             }
 
-            let endIndex = documentContextBeforeInput.endIndex
-            let lastTwoCharacters = documentContextBeforeInput.substringFromIndex(endIndex.advancedBy(-2))
+            let startIndex = documentContextBeforeInput.index(documentContextBeforeInput.endIndex, offsetBy: -2)
+            let lastTwoCharacters = documentContextBeforeInput[startIndex...]
 
             guard lastTwoCharacters == "  " else {
                 return
             }
 
-            let characterBeforeLastTwoCharacters = documentContextBeforeInput.substringWithRange(Range(start: endIndex.advancedBy(-3), end: endIndex.advancedBy(-2)))
+            let start = documentContextBeforeInput.index(documentContextBeforeInput.endIndex, offsetBy: -3)
+            let end = documentContextBeforeInput.index(documentContextBeforeInput.endIndex, offsetBy: -2)
+            let characterBeforeLastTwoCharacters = documentContextBeforeInput[start..<end]
 
             // It works like: `guard sentenceEndingSet.characterIsMember(characterBeforeLastTwoCharacters) else {}`.
             // More info: http://stackoverflow.com/questions/27697508/nscharacterset-characterismember-with-swifts-character-type
-            guard self.dynamicType.sentenceEndingSet.characterIsMember(characterBeforeLastTwoCharacters.utf16.first!) else {
+            guard type(of: self).sentenceEndingSet.characterIsMember(characterBeforeLastTwoCharacters.utf16.first!) else {
                 return
             }
 

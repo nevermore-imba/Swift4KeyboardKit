@@ -46,13 +46,12 @@ internal final class KeyboardConnectorShape: KeyboardShape {
         let beginPoints = self.beginShape.attachmentPoints()
         let endPoints = self.endShape.attachmentPoints()
 
-        let path = CGPathCreateMutable()
-
-        CGPathMoveToPoint(path, nil, beginPoints.0.x, beginPoints.0.y)
-        CGPathAddLineToPoint(path, nil, endPoints.1.x, endPoints.1.y)
-        CGPathAddLineToPoint(path, nil, endPoints.0.x, endPoints.0.y)
-        CGPathAddLineToPoint(path, nil, beginPoints.1.x, beginPoints.1.y)
-        CGPathCloseSubpath(path)
+        let path = CGMutablePath()
+        path.move(to: beginPoints.0)
+        path.addLine(to: endPoints.1)
+        path.addLine(to: endPoints.0)
+        path.addLine(to: beginPoints.1)
+        path.closeSubpath()
 
         let isVertical =
             (self.beginDirection == KeyboardDirection.Up || self.beginDirection == KeyboardDirection.Down) &&
@@ -94,32 +93,32 @@ internal final class KeyboardConnectorShape: KeyboardShape {
             let radius = min(absoluteDeltaPoint.x, absoluteDeltaPoint.y) / CGFloat(2.0)
             let radiusOffsetPoint = CGPoint(x: radius, y: radius) * deltaPoint.sign()
 
-            fillPath.moveToPoint(fromPoint)
-            currentEdgePath.moveToPoint(fromPoint)
+            fillPath.move(to: fromPoint)
+            currentEdgePath.move(to: fromPoint)
 
             curveFromPoint = fromPoint
             curveToPoint = fromPoint + radiusOffsetPoint
             curveControlPoint1 = curveFromPoint + radiusOffsetPoint * CGPoint(x: 0, y: 1) * circleControlPointRatio
             curveControlPoint2 = curveToPoint + radiusOffsetPoint * CGPoint(x: -1, y: -0) * circleControlPointRatio
 
-            fillPath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
-            currentEdgePath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            fillPath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            currentEdgePath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
 
-            fillPath.addLineToPoint(toPoint - radiusOffsetPoint)
-            currentEdgePath.addLineToPoint(toPoint - radiusOffsetPoint)
+            fillPath.addLine(to: toPoint - radiusOffsetPoint)
+            currentEdgePath.addLine(to: toPoint - radiusOffsetPoint)
 
             curveFromPoint = toPoint - radiusOffsetPoint
             curveToPoint = toPoint
             curveControlPoint1 = curveFromPoint + radiusOffsetPoint * CGPoint(x: 1, y: 0) * circleControlPointRatio
             curveControlPoint2 = curveToPoint + radiusOffsetPoint * CGPoint(x: -0, y: -1) * circleControlPointRatio
 
-            fillPath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
-            currentEdgePath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            fillPath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            currentEdgePath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
         }
         else {
-            fillPath.moveToPoint(beginPoints.0)
+            fillPath.move(to: beginPoints.0)
 
-            fillPath.addCurveToPoint(
+            fillPath.addCurve(to: 
                 endPoints.1,
                 controlPoint1: (isVertical ?
                     CGPointMake(beginPoints.0.x, midpoint) :
@@ -128,8 +127,8 @@ internal final class KeyboardConnectorShape: KeyboardShape {
                     CGPointMake(endPoints.1.x, midpoint) :
                     CGPointMake(midpoint, endPoints.1.y)))
 
-            currentEdgePath.moveToPoint(beginPoints.0)
-            currentEdgePath.addCurveToPoint(
+            currentEdgePath.move(to: beginPoints.0)
+            currentEdgePath.addCurve(to: 
                 endPoints.1,
                 controlPoint1: (isVertical ?
                     CGPointMake(beginPoints.0.x, midpoint) :
@@ -139,7 +138,7 @@ internal final class KeyboardConnectorShape: KeyboardShape {
                     CGPointMake(midpoint, endPoints.1.y)))
         }
 
-        currentEdgePath.applyTransform(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
+        currentEdgePath.apply(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
         edgePaths.append(currentEdgePath)
 
         // # end of 1
@@ -150,36 +149,36 @@ internal final class KeyboardConnectorShape: KeyboardShape {
         deltaPoint = toPoint - fromPoint
         absoluteDeltaPoint = deltaPoint.absolute()
 
-        fillPath.addLineToPoint(endPoints.0)
+        fillPath.addLine(to: endPoints.0)
 
         if (absoluteDeltaPoint.x > absoluteDeltaPoint.y) != !isVertical  {
             let radius = min(absoluteDeltaPoint.x, absoluteDeltaPoint.y) / CGFloat(2.0)
             let radiusOffsetPoint = CGPoint(x: radius, y: radius) * deltaPoint.sign()
 
-            fillPath.moveToPoint(fromPoint)
-            currentEdgePath.moveToPoint(fromPoint)
+            fillPath.move(to: fromPoint)
+            currentEdgePath.move(to: fromPoint)
 
             curveFromPoint = fromPoint
             curveToPoint = fromPoint + radiusOffsetPoint
             curveControlPoint1 = curveFromPoint + radiusOffsetPoint * CGPoint(x: 0, y: 1) * circleControlPointRatio
             curveControlPoint2 = curveToPoint + radiusOffsetPoint * CGPoint(x: -1, y: -0) * circleControlPointRatio
 
-            fillPath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
-            currentEdgePath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            fillPath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            currentEdgePath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
 
-            fillPath.addLineToPoint(toPoint - radiusOffsetPoint)
-            currentEdgePath.addLineToPoint(toPoint - radiusOffsetPoint)
+            fillPath.addLine(to: toPoint - radiusOffsetPoint)
+            currentEdgePath.addLine(to: toPoint - radiusOffsetPoint)
 
             curveFromPoint = toPoint - radiusOffsetPoint
             curveToPoint = toPoint
             curveControlPoint1 = curveFromPoint + radiusOffsetPoint * CGPoint(x: 1, y: 0) * circleControlPointRatio
             curveControlPoint2 = curveToPoint + radiusOffsetPoint * CGPoint(x: -0, y: -1) * circleControlPointRatio
 
-            fillPath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
-            currentEdgePath.addCurveToPoint(curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            fillPath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
+            currentEdgePath.addCurve(to: curveToPoint, controlPoint1: curveControlPoint1, controlPoint2: curveControlPoint2)
         }
         else {
-            fillPath.addCurveToPoint(
+            fillPath.addCurve(to: 
                 beginPoints.1,
                 controlPoint1: (isVertical ?
                     CGPointMake(endPoints.0.x, midpoint) :
@@ -187,11 +186,11 @@ internal final class KeyboardConnectorShape: KeyboardShape {
                 controlPoint2: (isVertical ?
                     CGPointMake(beginPoints.1.x, midpoint) :
                     CGPointMake(midpoint, beginPoints.1.y)))
-            fillPath.addLineToPoint(beginPoints.0)
+            fillPath.addLine(to: beginPoints.0)
 
             currentEdgePath = UIBezierPath()
-            currentEdgePath.moveToPoint(endPoints.0)
-            currentEdgePath.addCurveToPoint(
+            currentEdgePath.move(to: endPoints.0)
+            currentEdgePath.addCurve(to: 
                 beginPoints.1,
                 controlPoint1: (isVertical ?
                     CGPointMake(endPoints.0.x, midpoint) :
@@ -201,20 +200,20 @@ internal final class KeyboardConnectorShape: KeyboardShape {
                     CGPointMake(midpoint, beginPoints.1.y)))
         }
 
-        currentEdgePath.applyTransform(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
+        currentEdgePath.apply(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
         edgePaths.append(currentEdgePath)
 
         // # end of 2
 
-        fillPath.addLineToPoint(beginPoints.0)
+        fillPath.addLine(to: beginPoints.0)
 
-        fillPath.closePath()
-        fillPath.applyTransform(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
+        fillPath.close()
+        fillPath.apply(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
 
 
         let compoundEdgePath = UIBezierPath()
         for edgePath in edgePaths {
-            compoundEdgePath.appendPath(edgePath)
+            compoundEdgePath.append(edgePath)
         }
 
         self.fillPath = fillPath

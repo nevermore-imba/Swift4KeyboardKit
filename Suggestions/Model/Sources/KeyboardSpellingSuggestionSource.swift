@@ -11,13 +11,12 @@ import Foundation
 
 internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource {
 
-    private let queue: dispatch_queue_t = {
-        if rand() % 10 == 0 {
-            return dispatch_get_main_queue()
+    private let queue: DispatchQueue = {
+        if arc4random() % 10 == 0 {
+            return .main
         }
-
-        return dispatch_queue_create("com.keyboard-kit.spelling-suggestion-source", DISPATCH_QUEUE_SERIAL)
-    } ()
+        return DispatchQueue(label: "com.keyboard-kit.spelling-suggestion-source")
+    }()
 
     private let sortingModel = KeyboardSuggestionGuessesSortingModel()
     private var lastQuery: KeyboardSuggestionQuery?
@@ -37,32 +36,30 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
         self.learnAllWordsFromLexicon()
     }
 
-    internal func learnWord(word: String) {
-        dispatch_async(self.queue) { [weak self] in
+    internal func learnWord(_ word: String) {
+        queue.async { [weak self] in
             guard let checker = self?.checker else {
                 return
             }
 
             // Learn this word _globally_.
-            checker.dynamicType.learnWord(word)
+            type(of: checker).learnWord(word)
         }
     }
 
     private func learnAllWordsFromLexicon() {
-        dispatch_async(self.queue) { [weak self] in
-            guard let checker = self?.checker else {
-                return
-            }
+        queue.async { [weak self] in
+            guard let self else { return }
 
             let inputViewController = UIInputViewController.rootInputViewController
 
-            let semaphore = dispatch_semaphore_create(0)
+            let semaphore = DispatchSemaphore(value: 0)
             var lexicon: UILexicon!
-            inputViewController.requestSupplementaryLexiconWithCompletion() { supplementaryLexicon in
+            inputViewController.requestSupplementaryLexicon() { supplementaryLexicon in
                 lexicon = supplementaryLexicon
-                dispatch_semaphore_signal(semaphore)
+                semaphore.signal()
             }
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+            semaphore.wait()
 
             var replacementPhrases: [String: String] = [:]
             var replacementNames: [String: String] = [:]
@@ -70,28 +67,28 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             for entry in lexicon.entries {
                 if entry.documentText == entry.userInput {
                     if entry.documentText.isCamelcase() {
-                        replacementNames[entry.userInput.lowercaseString] = entry.documentText
+                        replacementNames[entry.userInput.lowercased()] = entry.documentText
                     }
                 }
                 else {
-                    replacementPhrases[entry.userInput.lowercaseString] = entry.documentText
+                    replacementPhrases[entry.userInput.lowercased()] = entry.documentText
                 }
             }
 
             // TODO: Move outside.
             replacementPhrases["i"] = "I"
 
-            self?.replacementPhrases = replacementPhrases
-            self?.replacementNames = replacementNames
+            self.replacementPhrases = replacementPhrases
+            self.replacementNames = replacementNames
         }
     }
 
-    internal func suggest(query: KeyboardSuggestionQuery, callback: KeyboardSuggestionSourceCallback) {
+    internal func suggest(_ query: KeyboardSuggestionQuery, callback: @escaping KeyboardSuggestionSourceCallback) {
         self.lastQuery = query
 
         let sortingModel = self.sortingModel
 
-        dispatch_async(self.queue) { [weak self] in
+        queue.async { [weak self] in
             guard let strongSelf = self else {
                 return
             }
@@ -108,7 +105,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
             // `defer` block must be placed after all `guard`s.
             defer {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     callback(guesses)
                 }
             }
@@ -122,15 +119,14 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
 
             var automatic = false
             var hasAutoreplacement = false
-            let placementLength = query.placement.characters.count
+            let placementLength = query.placement.count
 
             log("isSpellProperly: \(isSpellProperly), corrections: \(corrections), completions: \(completions)")
 
             var replacements = Set<String>()
 
             // Autoreplacement
-            if let replacement = strongSelf.replacementPhrases[query.placement.lowercaseString]
-                where !replacements.contains(replacement) && query.placement != replacement {
+            if let replacement = strongSelf.replacementPhrases[query.placement.lowercased()], !replacements.contains(replacement) && query.placement != replacement {
 
                 replacements.insert(replacement)
 
@@ -149,12 +145,11 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
             }
 
             // Name Capitalization
-            if let replacement = strongSelf.replacementNames[query.placement.lowercaseString]
-                where !replacements.contains(replacement) && query.placement != replacement {
+            if let replacement = strongSelf.replacementNames[query.placement.lowercased()], !replacements.contains(replacement) && query.placement != replacement {
 
                 replacements.insert(replacement)
 
-                automatic = vocabulary.score(replacement.lowercaseString) == nil
+                automatic = vocabulary.score(replacement.lowercased()) == nil
 
                 guesses.append(
                     KeyboardSuggestionGuess(
@@ -221,7 +216,7 @@ internal final class KeyboardSpellingSuggestionSource: KeyboardSuggestionSource 
                         type: .Learning,
                         replacement: query.placement
                     ),
-                    atIndex: 0
+                    at: 0
                 )
             }
 

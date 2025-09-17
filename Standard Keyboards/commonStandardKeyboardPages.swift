@@ -37,7 +37,7 @@ public func specialKeyboardPage() -> KeyboardPage {
 
 
 public func numbersKeyboardPage(
-    currencySymbol currencySymbol: String = "$",
+    currencySymbol: String = "$",
     numbers: [Character]? = nil
 ) -> KeyboardPage {
     var page = KeyboardPage()

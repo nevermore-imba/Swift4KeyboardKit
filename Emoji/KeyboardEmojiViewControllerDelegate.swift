@@ -9,12 +9,12 @@
 import UIKit
 
 
-public protocol KeyboardEmojiViewControllerDelegate: class {
-    func emojiViewController(keyboardEmojiViewController: KeyboardEmojiViewController, emojiCategoryWasChanged emojiCategory: KeyboardEmojiCategory)
+public protocol KeyboardEmojiViewControllerDelegate: AnyObject {
+    func emojiViewController(_ keyboardEmojiViewController: KeyboardEmojiViewController, emojiCategoryWasChanged emojiCategory: KeyboardEmojiCategory)
 }
 
 
 // # Optionality
 extension KeyboardEmojiViewControllerDelegate {
-    public func emojiViewController(keyboardEmojiViewController: KeyboardEmojiViewController, emojiCategoryWasChanged emojiCategory: KeyboardEmojiCategory) {}
+    public func emojiViewController(_ keyboardEmojiViewController: KeyboardEmojiViewController, emojiCategoryWasChanged emojiCategory: KeyboardEmojiCategory) {}
 }

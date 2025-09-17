@@ -12,5 +12,5 @@ import Foundation
 typealias KeyboardSuggestionSourceCallback = ([KeyboardSuggestionGuess]) -> ()
 
 protocol KeyboardSuggestionSource {
-    func suggest(query: KeyboardSuggestionQuery, callback: KeyboardSuggestionSourceCallback)
+    func suggest(_ query: KeyboardSuggestionQuery, callback: @escaping KeyboardSuggestionSourceCallback)
 }

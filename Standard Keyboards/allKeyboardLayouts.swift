@@ -22,7 +22,7 @@ public let allKeyboardLayouts = [
     italianKeyboardLayout,
     spanishKeyboardLayout,
     klingonKeyboardLayout,
-].sort { $0.language < $1.language }
+].sorted { $0.language < $1.language }
 
 public let allKeyboardLayoutsById: [String: KeyboardLayout] = {
     var keyboardLayoutsById: [String: KeyboardLayout] = [:]

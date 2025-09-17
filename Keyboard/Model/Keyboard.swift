@@ -25,7 +25,7 @@ public struct KeyboardLayout {
 
 
 extension KeyboardLayout {
-    public func localizedTitle(prefix prefix: String = "keyboard-layout.") -> String {
+    public func localizedTitle(prefix: String = "keyboard-layout.") -> String {
         var string = NSLocalizedString("\(prefix)\(self.language)", value: "", comment: "")
         if !string.isEmpty {
             return string

@@ -18,17 +18,15 @@ public struct KeyboardEmoji {
 }
 
 
-extension KeyboardEmoji: Equatable {
-}
-
-public func ==(lhs: KeyboardEmoji, rhs: KeyboardEmoji) -> Bool {
-    return
-        lhs.character == rhs.character
-}
-
+extension KeyboardEmoji: Equatable {}
 
 extension KeyboardEmoji: Hashable {
-    public var hashValue: Int {
-        return self.character.hashValue
+
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.character == rhs.character
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(character)
     }
 }

@@ -17,8 +17,8 @@ public let turkishKeyboardLayout: KeyboardLayout = {
 
     keyboardLayout.pages[0].appendKey(KeyboardKey(character: "ğ"), row: 1)
     keyboardLayout.pages[0].appendKey(KeyboardKey(character: "ü"), row: 1)
-    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "ş"), atIndex: keyboardLayout.pages[0].rows[2].count - 1)
-    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "i"), atIndex: keyboardLayout.pages[0].rows[2].count - 1)
+    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "ş"), at: keyboardLayout.pages[0].rows[2].count - 1)
+    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "i"), at: keyboardLayout.pages[0].rows[2].count - 1)
 
     return keyboardLayout
 } ()

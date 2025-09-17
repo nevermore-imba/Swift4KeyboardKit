@@ -9,32 +9,35 @@
 import Foundation
 
 
-private let keyboardNamePattern = try! NSRegularExpression(pattern: "^([a-z]+)(_([a-z]+))?(-([a-z]))?(@(.+))?$", options: [.CaseInsensitive])
+private let keyboardNamePattern = try! NSRegularExpression(
+    pattern: "^([a-z]+)(_([a-z]+))?(-([a-z]))?(@(.+))?$",
+    options: [.caseInsensitive]
+)
 
-private func keyboardLayoutByBundleId(keyboard: String) -> KeyboardLayout? {
+private func keyboardLayoutByBundleId(_ keyboard: String) -> KeyboardLayout? {
 
-    guard let match = keyboardNamePattern.firstMatchInString(
-            keyboard,
+    guard let match = keyboardNamePattern.firstMatch(
+        in: keyboard,
             options: [],
-            range: NSRange(location: 0, length: keyboard.characters.count)
+            range: NSRange(location: 0, length: keyboard.count)
         ) else
     {
         return nil
     }
 
     let fragmentAtIndex = { (index: Int) -> String? in
-        let range = match.rangeAtIndex(index)
+        let range = match.range(at: index)
         guard range.location != NSNotFound else {
             return nil
         }
 
-        return NSString(string: keyboard).substringWithRange(range)
+        return NSString(string: keyboard).substring(with: range)
     }
 
     let language = fragmentAtIndex(1)
-    let country = fragmentAtIndex(3)
-    let region = fragmentAtIndex(5)
-    let parameters = fragmentAtIndex(7)
+//    let country = fragmentAtIndex(3)
+//    let region = fragmentAtIndex(5)
+//    let parameters = fragmentAtIndex(7)
 
     for keyboardLayout in allKeyboardLayouts {
         if keyboardLayout.language == language {
@@ -47,7 +50,7 @@ private func keyboardLayoutByBundleId(keyboard: String) -> KeyboardLayout? {
 
 
 public func suitableKeyboardLayouts() -> [KeyboardLayout] {
-    guard let keyboards = NSUserDefaults.standardUserDefaults().dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
+    guard let keyboards = UserDefaults.standard.stringArray(forKey: "AppleKeyboards") else {
         return [englishKeyboardLayout]
     }
 

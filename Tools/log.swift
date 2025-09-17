@@ -8,13 +8,12 @@
 
 import Foundation
 
-
-internal func log<T>(argument: T, file: String = #file, line: Int = #line, function: String = #function) {
+internal func log<T>(_ argument: T, _ file: String = #file, _ line: Int = #line, _ function: String = #function) {
     guard _isDebugAssertConfiguration() else {
         return
     }
-
-    let fileName = NSURL(fileURLWithPath: file, isDirectory: false).URLByDeletingPathExtension?.lastPathComponent ?? "Unknown"
+    
+    let fileName = URL(fileURLWithPath: file, isDirectory: false).deletingPathExtension().lastPathComponent
 
     print("KeyboardKit/\(fileName)@\(line): \(argument)")
 }

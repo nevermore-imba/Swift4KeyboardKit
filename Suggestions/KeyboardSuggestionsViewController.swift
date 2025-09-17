@@ -41,7 +41,7 @@ public class KeyboardSuggestionsViewController: UIViewController {
         super.loadView()
 
         self.itemsView = KeyboardSuggestionItemsView(frame: self.view.bounds)
-        self.itemsView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        self.itemsView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.itemsView.delegate = self
 
         self.updateApperanceManager()
@@ -61,19 +61,19 @@ public class KeyboardSuggestionsViewController: UIViewController {
 
 extension KeyboardSuggestionsViewController: KeyboardSuggestionItemsViewDelegate {
 
-    func itemWasActivated(guess: KeyboardSuggestionGuess) {
-        self.suggestionModel.applyGuest(guess, addSpace: true)
+    func itemWasActivated(_ item: KeyboardSuggestionGuess) {
+        self.suggestionModel.applyGuest(item, addSpace: true)
     }
 }
 
 
 extension KeyboardSuggestionsViewController: KeyboardSuggestionModelDelegate {
 
-    public func suggestionModelWillUpdateGuesses(query query: KeyboardSuggestionQuery) {
+    public func suggestionModelWillUpdateGuesses(query: KeyboardSuggestionQuery) {
         self.delegate?.suggestionsViewControllerWillUpdateSuggestionItems(query: query)
     }
 
-    public func suggestionModelDidUpdateGuesses(query query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess]) {
+    public func suggestionModelDidUpdateGuesses(query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess]) {
         if #available(iOS 9.0, *) {
             self.loadViewIfNeeded()
         } else {

@@ -17,48 +17,46 @@ public enum KeyboardDirection: Int {
 
     func clockwise() -> KeyboardDirection {
         switch self {
-        case Left:
-            return Up
-        case Right:
-            return Down
-        case Up:
-            return Right
-        case Down:
-            return Left
+        case .Left:
+            return .Up
+        case .Right:
+            return .Down
+        case .Up:
+            return .Right
+        case .Down:
+            return .Left
         }
     }
 
     func counterclockwise() -> KeyboardDirection {
         switch self {
-        case Left:
-            return Down
-        case Right:
-            return Up
-        case Up:
-            return Left
-        case Down:
-            return Right
+        case .Left:
+            return .Down
+        case .Right:
+            return .Up
+        case .Up:
+            return .Left
+        case .Down:
+            return .Right
         }
     }
 
     func opposite() -> KeyboardDirection {
         switch self {
-        case Left:
-            return Right
-        case Right:
-            return Left
-        case Up:
-            return Down
-        case Down:
-            return Up
+        case .Left:
+            return .Right
+        case .Right:
+            return .Left
+        case .Up:
+            return .Down
+        case .Down:
+            return .Up
         }
     }
 
     func horizontal() -> Bool {
         switch self {
-        case
-        Left,
-        Right:
+        case .Left, .Right:
             return true
         default:
             return false
@@ -71,13 +69,13 @@ extension KeyboardDirection: CustomStringConvertible {
     public var description: String {
         get {
             switch self {
-            case Left:
+            case .Left:
                 return "Left"
-            case Right:
+            case .Right:
                 return "Right"
-            case Up:
+            case .Up:
                 return "Up"
-            case Down:
+            case .Down:
                 return "Down"
             }
         }

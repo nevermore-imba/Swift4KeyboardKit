@@ -25,7 +25,7 @@ internal final class KeyboardNumericKeyView: UIControl {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.exclusiveTouch = false
+        self.isExclusiveTouch = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +35,7 @@ internal final class KeyboardNumericKeyView: UIControl {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        var bounds = self.bounds
+        let bounds = self.bounds
 
         if
             let titleView = self.titleView,
@@ -71,14 +71,14 @@ internal final class KeyboardNumericKeyView: UIControl {
         }
     }
 
-    override var highlighted: Bool {
+    override var isHighlighted: Bool {
         didSet {
             self.updateAppearance()
         }
     }
 
     private func update() {
-        self.hidden = false
+        self.isHidden = false
         self.titleView?.removeFromSuperview()
         self.subtitleView?.removeFromSuperview()
         self.symbolView?.removeFromSuperview()
@@ -99,13 +99,13 @@ internal final class KeyboardNumericKeyView: UIControl {
 
         case .Backspace:
             let symbolView = KeyboardKeyBackspaceSymbolView()
-            symbolView.userInteractionEnabled = false
+            symbolView.isUserInteractionEnabled = false
             self.addSubview(symbolView)
             self.symbolView = symbolView
             break
 
         case .Nothing:
-            self.hidden = true
+            self.isHidden = true
             break
         }
     }
@@ -115,7 +115,7 @@ internal final class KeyboardNumericKeyView: UIControl {
 
         keyAppearanceVariant.keyColorType = self.keyType.isSpecial ? .Special : .Regular
 
-        keyAppearanceVariant.keyMode.highlightMode = self.highlighted ? .Highlighted : .None
+        keyAppearanceVariant.keyMode.highlightMode = self.isHighlighted ? .Highlighted : .None
 
         let appearance = self.appearanceManager.appearanceForVariant(keyAppearanceVariant)
 
@@ -125,7 +125,7 @@ internal final class KeyboardNumericKeyView: UIControl {
         self.subtitleView?.textColor = appearance.keycapTextColor
 
         self.titleView?.font = appearance.keycapTextFont
-        self.subtitleView?.font = appearance.keycapTextFont?.fontWithSize(10.0)
+        self.subtitleView?.font = appearance.keycapTextFont?.withSize(10.0)
 
         self.symbolView?.tintColor = appearance.keycapTextColor
     }

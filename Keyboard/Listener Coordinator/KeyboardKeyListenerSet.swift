@@ -16,20 +16,20 @@ public final class KeyboardKeyListenerSet: KeyboardKeyListenerProtocol {
 
     public init() {}
 
-    public func addListener(listener: KeyboardKeyListenerProtocol) {
+    public func addListener(_ listener: KeyboardKeyListenerProtocol) {
         self.listeners.append(listener)
     }
 
-    public func removeListener(listener: KeyboardKeyListenerProtocol) {
-        guard let index = self.listeners.indexOf({ $0 == listener }) else {
+    public func removeListener(_ listener: KeyboardKeyListenerProtocol) {
+        guard let index = self.listeners.firstIndex(where: ({ $0 == listener })) else {
             fatalError("The listener not found.")
         }
 
-        self.listeners.removeAtIndex(index)
+        self.listeners.remove(at: index)
     }
 
     // # KeyboardKeyListenerProtocol
-    public func keyViewDidSendEvent(event: KeyboardKeyEvent) {
+    public func keyViewDidSendEvent(_ event: KeyboardKeyEvent) {
         for listener in self.listeners {
             listener.keyViewDidSendEvent(event)
         }

@@ -54,7 +54,7 @@ public class KeyboardNumericKeypadViewController: UIViewController {
     }
 
     private func updateAppearance() {
-        guard self.isViewLoaded() else {
+        guard self.isViewLoaded else {
             return
         }
 
@@ -65,7 +65,7 @@ public class KeyboardNumericKeypadViewController: UIViewController {
 
 
 extension KeyboardNumericKeypadViewController: KeyboardTextDocumentObserver {
-    public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {
+    public func keyboardTextInputTraitsDidChange(_ textInputTraits: UITextInputTraits) {
         self.updateAppearance()
     }
 }

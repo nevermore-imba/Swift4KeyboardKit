@@ -8,15 +8,16 @@
 
 import UIKit
 
-private let mainScreenScale = UIScreen.mainScreen().scale
+private let mainScreenScale = UIScreen.main.scale
 
 protocol Roundable {
     func rounded() -> Self
 }
 
 extension CGFloat: Roundable {
+
     func rounded() -> CGFloat {
-        return round(self * mainScreenScale) / mainScreenScale
+        return CGFloat(roundf(Float(self * mainScreenScale))) / mainScreenScale
     }
 }
 

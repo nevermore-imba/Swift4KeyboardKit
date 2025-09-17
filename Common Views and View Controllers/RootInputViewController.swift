@@ -29,15 +29,15 @@ public class RootInputViewController: UIInputViewController {
                 self.setupKludge()
 
                 self.heightConstraint.constant = value
-                self.heightConstraint.active = true
+                self.heightConstraint.isActive = true
             }
             else {
-                self.heightConstraint.active = false
+                self.heightConstraint.isActive = false
             }
         }
     }
 
-    public override init(nibName: String?, bundle: NSBundle?) {
+    public override init(nibName: String?, bundle: Bundle?) {
         super.init(nibName: nibName, bundle: bundle)
 
         if inputViewControllerCounter > 0 {
@@ -64,37 +64,37 @@ public class RootInputViewController: UIInputViewController {
     }
 
     private lazy var heightConstraint: NSLayoutConstraint = {
-        assert(self.isViewLoaded(), "View must be loaded before `heightConstraint` property can be accessed.")
+        assert(self.isViewLoaded, "View must be loaded before `heightConstraint` property can be accessed.")
 
         let heightConstraint = NSLayoutConstraint(
-            item: self.view,
-            attribute: NSLayoutAttribute.Height,
-            relatedBy: NSLayoutRelation.Equal,
+            item: self.view!,
+            attribute: .height,
+            relatedBy: .equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: .notAnAttribute,
             multiplier: 1.0,
             constant: 700.0
         )
 
-        heightConstraint.priority = UILayoutPriorityDefaultHigh
+        heightConstraint.priority = .defaultHigh
 
         return heightConstraint
     }()
 
     private lazy var contentViewWidthConstraint: NSLayoutConstraint = {
-        assert(self.isViewLoaded(), "View must be loaded before `contentViewWidthConstraint` property can be accessed.")
+        assert(self.isViewLoaded, "View must be loaded before `contentViewWidthConstraint` property can be accessed.")
 
         let widthConstraint = NSLayoutConstraint(
-            item: self.contentView,
-            attribute: NSLayoutAttribute.Width,
-            relatedBy: NSLayoutRelation.Equal,
+            item: self.contentView!,
+            attribute: .width,
+            relatedBy: .equal,
             toItem: nil,
-            attribute: NSLayoutAttribute.NotAnAttribute,
+            attribute: .notAnAttribute,
             multiplier: 1.0,
             constant: 0.0
         )
 
-        widthConstraint.active = true
+        widthConstraint.isActive = true
 
         return widthConstraint
     }()
@@ -107,13 +107,13 @@ public class RootInputViewController: UIInputViewController {
 
         let kludge = UIView()
         kludge.translatesAutoresizingMaskIntoConstraints = false
-        kludge.hidden = true
+        kludge.isHidden = true
         self.view.addSubview(kludge)
 
-        let a = NSLayoutConstraint(item: kludge, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0)
-        let b = NSLayoutConstraint(item: kludge, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: 0)
-        let c = NSLayoutConstraint(item: kludge, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 0)
-        let d = NSLayoutConstraint(item: kludge, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: self.view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: 0)
+        let a = NSLayoutConstraint(item: kludge, attribute: .left, relatedBy: .equal, toItem: self.view, attribute: .left, multiplier: 1, constant: 0)
+        let b = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: 0)
+        let c = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
+        let d = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
 
         self.view.addConstraints([a, b, c, d])
 
@@ -126,7 +126,7 @@ public class RootInputViewController: UIInputViewController {
         self.view.setNeedsUpdateConstraints()
         self.view.updateConstraintsIfNeeded()
 
-        let height = self.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height
+        let height = self.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         self.height = max(height, 100)
     }
 
@@ -137,7 +137,7 @@ public class RootInputViewController: UIInputViewController {
 
         // # `backgroundView`
         // It's tricky, but we have to have `backgroundView` that cover all keyboard when any animation is performing.
-        let screenSize = UIScreen.mainScreen().bounds.size
+        let screenSize = UIScreen.main.bounds.size
         let maximumKeyboardWidthOrHeight = max(screenSize.width, screenSize.height)
         let maximumKeyboardSize = CGSize(width: maximumKeyboardWidthOrHeight, height: maximumKeyboardWidthOrHeight)
         self.backgroundView = UIView(frame: CGRect(origin: CGPoint.zero, size: maximumKeyboardSize))
@@ -154,17 +154,17 @@ public class RootInputViewController: UIInputViewController {
         super.viewDidLoad()
     }
 
-    public override func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         log("`RootInputViewController` will appear.")
         super.viewWillAppear(animated)
     }
 
-    public override func viewDidAppear(animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.updateKeyboardWindowHeight()
     }
 
-    public override func viewDidDisappear(animated: Bool) {
+    public override func viewDidDisappear(_ animated: Bool) {
         log("`RootInputViewController` did disappear.")
         super.viewDidDisappear(animated)
     }
@@ -180,8 +180,8 @@ public class RootInputViewController: UIInputViewController {
         super.viewDidLayoutSubviews()
     }
 
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    public override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         self.updateKeyboardWindowHeight()
     }
 

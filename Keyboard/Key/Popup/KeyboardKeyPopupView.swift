@@ -36,7 +36,7 @@ internal class KeyboardKeyPopupView: UIView {
     }
 
     internal func intrinsicFrame() -> CGRect {
-        let size = self.intrinsicContentSize()
+        let size = self.intrinsicContentSize
         let keyViewSize = self.keyView!.bounds.size
 
         let origin = CGPoint(
@@ -51,12 +51,12 @@ internal class KeyboardKeyPopupView: UIView {
         return self.adjustFrame(self.intrinsicFrame())
     }
 
-    internal func adjustFrame(frame: CGRect) -> CGRect {
+    internal func adjustFrame(_ frame: CGRect) -> CGRect {
         let minimalPadding = CGPoint(x: 3, y: 3)
         let window = self.window!
 
-        var popupFrameToWindow = window.convertRect(frame, fromView: self)
-        let keyFrameToWindow = window.convertRect(self.bounds, fromView: self)
+        var popupFrameToWindow = window.convert(frame, from: self)
+        let keyFrameToWindow = window.convert(self.bounds, from: self)
 
         // Top edge
         if popupFrameToWindow.origin.y < minimalPadding.y {
@@ -79,13 +79,13 @@ internal class KeyboardKeyPopupView: UIView {
         // Bottom edge
         // TODO: Implement me, please.
 
-        return window.convertRect(popupFrameToWindow, toView: self)
+        return window.convert(popupFrameToWindow, to: self)
     }
 
-    override func intrinsicContentSize() -> CGSize {
+    override var intrinsicContentSize: CGSize {
         // TODO: Rethink and refactor
-        let actualScreenWidth = UIScreen.mainScreen().nativeBounds.size.width / UIScreen.mainScreen().nativeScale
-        let totalHeight = LayoutConstants.popupTotalHeight(actualScreenWidth)
+        let actualScreenWidth = UIScreen.main.nativeBounds.size.width / UIScreen.main.nativeScale
+        let totalHeight = LayoutConstants.popupTotalHeight(deviceWidth: actualScreenWidth)
         let popupGap = LayoutConstants.popupGap
 
         let size = CGSize(

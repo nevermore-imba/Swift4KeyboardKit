@@ -27,7 +27,7 @@ internal final class KeyboardSuggestionItemView: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.labelView = UILabel()
-        self.labelView.lineBreakMode = .ByTruncatingHead
+        self.labelView.lineBreakMode = .byTruncatingHead
         self.addSubview(self.labelView)
 
         self.layer.cornerRadius = 2.0
@@ -45,7 +45,7 @@ internal final class KeyboardSuggestionItemView: UIControl {
         let verticalPadding = CGFloat(1.0)
 
         var labelFrame = self.bounds
-        labelFrame.insetInPlace(dx: horizontalPadding, dy: verticalPadding)
+        labelFrame = labelFrame.insetBy(dx: horizontalPadding, dy: verticalPadding)
 
         let size = self.labelView.sizeThatFits(labelFrame.size)
         let width = min(size.width, labelFrame.size.width)
@@ -71,8 +71,8 @@ internal final class KeyboardSuggestionItemView: UIControl {
         let bodyColor = appearance.keycapBodyColor
         let textColor = appearance.keycapTextColor
 
-        self.backgroundColor = bodyColor//.colorWithAlphaComponent(0.5)
-        self.layer.borderColor = appearance.keycapBorderColor.CGColor
+        self.backgroundColor = bodyColor//.withAlphaComponent(0.5)
+        self.layer.borderColor = appearance.keycapBorderColor.cgColor
         self.layer.borderWidth = appearance.keycapBorderSize
         //self.layer.cornerRadius = appearance.keycapCornerRadius
         self.labelView.textColor = textColor

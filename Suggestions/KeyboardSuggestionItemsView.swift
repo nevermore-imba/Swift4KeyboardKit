@@ -9,8 +9,8 @@
 import Foundation
 
 
-protocol KeyboardSuggestionItemsViewDelegate: class {
-    func itemWasActivated(item: KeyboardSuggestionGuess)
+protocol KeyboardSuggestionItemsViewDelegate: AnyObject {
+    func itemWasActivated(_ item: KeyboardSuggestionGuess)
 }
 
 
@@ -49,7 +49,7 @@ internal final class KeyboardSuggestionItemsView: UIView {
         let regularItemsCount = count - compactItemsCount
 
         var itemFrame = self.bounds
-        itemFrame.insetInPlace(dx: horizontalPadding, dy: verticalPadding)
+        itemFrame = itemFrame.insetBy(dx: horizontalPadding, dy: verticalPadding)
 
         let width = itemFrame.size.width
 
@@ -72,7 +72,7 @@ internal final class KeyboardSuggestionItemsView: UIView {
             while self.itemViews.count < self.items.count {
                 let itemView = KeyboardSuggestionItemView()
                 itemView.appearanceManager = self.appearanceManager
-                itemView.addTarget(self, action: "handleItemTouchDown:", forControlEvents: .TouchDown)
+                itemView.addTarget(self, action: #selector(self.handleItemTouchDown(_:)), for: .touchDown)
                 self.addSubview(itemView)
                 self.itemViews.append(itemView)
             }
@@ -99,7 +99,7 @@ internal final class KeyboardSuggestionItemsView: UIView {
         //self.layoutIfNeeded()
     }
     
-    dynamic func handleItemTouchDown(itemView: KeyboardSuggestionItemView) {
+    @objc func handleItemTouchDown(_ itemView: KeyboardSuggestionItemView) {
         self.delegate?.itemWasActivated(itemView.item)
     }
 

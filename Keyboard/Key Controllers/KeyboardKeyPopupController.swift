@@ -10,19 +10,19 @@ import UIKit
 
 
 internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol {
-    let popupShowEvents: UIControlEvents = [.TouchDown, .TouchDragInside, .TouchDragEnter]
-    let popupHideEvents: UIControlEvents = [.TouchDragExit, .TouchCancel]
-    let popupDelayedHideEvents: UIControlEvents = [.TouchUpInside, .TouchUpOutside, .TouchDragOutside]
+    let popupShowEvents: UIControl.Event = [.touchDown, .touchDragInside, .touchDragEnter]
+    let popupHideEvents: UIControl.Event = [.touchDragExit, .touchCancel]
+    let popupDelayedHideEvents: UIControl.Event = [.touchUpInside, .touchUpOutside, .touchDragOutside]
 
     internal init() {
     }
 
-    internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    internal func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         let appearance = keyView.appearance
 
         if key.alternateKeys != nil {
             if popupShowEvents.contains(controlEvents) {
-                self.setTimeout(keyView.hashValue) {
+                self.setTimeout(token: keyView.hashValue) {
 
                     KeyboardSoundService.sharedInstance.playAlternateInputSound()
 
@@ -58,8 +58,7 @@ internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol
             popupDelayedHideEvents.contains(controlEvents)
         {
             let delay = 0.05
-            let when = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * NSTimeInterval(NSEC_PER_SEC)))
-            dispatch_after(when, dispatch_get_main_queue()) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                 self?.hidePopupForKeyView(keyView)
             }
             return
@@ -67,18 +66,18 @@ internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol
 
     }
 
-    private func showPopupForKeyView(keyView: KeyboardKeyView) {
+    private func showPopupForKeyView(_ keyView: KeyboardKeyView) {
         keyView.keyMode.popupMode = .Preview
         keyView.updateIfNeeded()
     }
 
-    private func hidePopupForKeyView(keyView: KeyboardKeyView) {
+    private func hidePopupForKeyView(_ keyView: KeyboardKeyView) {
         keyView.keyMode.popupMode = .None
         keyView.updateIfNeeded()
     }
 
     private var timeoutToken: Int?
-    func setTimeout(token: Int?, callback: () -> ()) {
+    func setTimeout(token: Int?, callback: @escaping () -> Void) {
         guard token != self.timeoutToken else {
             return
         }
@@ -90,8 +89,8 @@ internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol
         let timeoutToken = token
 
         let delay = 0.7
-        let when = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * NSTimeInterval(NSEC_PER_SEC)))
-        dispatch_after(when, dispatch_get_main_queue()) { [weak weakSelf = self] in
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak weakSelf = self] in
             guard let strongSelf = weakSelf else {
                 return
             }
@@ -111,15 +110,15 @@ internal final class KeyboardKeyPopupTypeController: KeyboardKeyListenerProtocol
 
 
 
-extension UIControlEvents {
-    internal static let LongPress = UIControlEvents(rawValue: 0x01000000)
-    internal static let VeryLongPress = UIControlEvents(rawValue: 0x02000000)
+extension UIControl.Event {
+    internal static let LongPress = Self(rawValue: 0x01000000)
+    internal static let VeryLongPress = Self(rawValue: 0x02000000)
 }
 
 
 extension KeyboardKeyListenerProtocol {
 
-    internal func handleLongPresses(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    internal func handleLongPresses(controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
 
     }
 }

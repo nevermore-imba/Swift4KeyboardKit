@@ -11,14 +11,14 @@ import Foundation
 
 extension String {
     func isCamelcase() -> Bool {
-        return self.uppercaseString != self && self.lowercaseString != self
+        return self.uppercased() != self && self.lowercased() != self
     }
 
     func isUppercase() -> Bool {
-        return self.uppercaseString == self
+        return self.uppercased() == self
     }
 
     func isLowercase() -> Bool {
-        return self.lowercaseString == self
+        return self.lowercased() == self
     }
 }

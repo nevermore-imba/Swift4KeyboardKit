@@ -10,11 +10,11 @@ import Foundation
 
 
 public func isKeyboardExtensionEnabled() -> Bool {
-    guard let appBundleIdentifier = NSBundle.mainBundle().bundleIdentifier else {
+    guard let appBundleIdentifier = Bundle.main.bundleIdentifier else {
         fatalError("isKeyboardExtensionEnabled(): Cannot retrieve bundle identifier.")
     }
 
-    guard let keyboards = NSUserDefaults.standardUserDefaults().dictionaryRepresentation()["AppleKeyboards"] as? [String] else {
+    guard let keyboards = UserDefaults.standard.stringArray(forKey: "AppleKeyboards") else {
         // There is no key `AppleKeyboards` in NSUserDefaults. That happens sometimes.
         return false
     }

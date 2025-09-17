@@ -16,10 +16,10 @@ public enum KeyboardColorMode: Int {
 
 extension KeyboardColorMode {
     public init(keyboardAppearance: UIKeyboardAppearance) {
-        self = keyboardAppearance == .Dark ? .Dark : .Light
+        self = keyboardAppearance == .dark ? .Dark : .Light
     }
 
     public static func suitable() -> KeyboardColorMode {
-        return KeyboardColorMode(keyboardAppearance: UIInputViewController.rootInputViewController.textDocumentProxy.keyboardAppearance ?? .Default)
+        return KeyboardColorMode(keyboardAppearance: UIInputViewController.rootInputViewController.textDocumentProxy.keyboardAppearance ?? .default)
     }
 }

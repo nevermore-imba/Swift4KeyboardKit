@@ -18,7 +18,7 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
     private var pollingTimer: CADisplayLink?
 
-    internal init(handler: Handler) {
+    internal init(handler: @escaping Handler) {
         self.handler = handler
         super.init()
 
@@ -32,16 +32,17 @@ internal final class KeyboardTextInputTraitsObserver: NSObject {
 
     internal func enable() {
         self.disable()
-        self.pollingTimer = UIScreen.mainScreen().displayLinkWithTarget(self, selector: #selector(self.poll))
-        self.pollingTimer?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
+        self.pollingTimer = UIScreen.main.displayLink(withTarget: self, selector: #selector(self.poll))
+        self.pollingTimer?.add(to: .current, forMode: .default)
     }
 
-    internal dynamic func poll() {
+    @objc internal func poll() {
         guard let inputViewController = UIInputViewController.optionalRootInputViewController else {
             return
         }
 
-        let strange = String(inputViewController.dynamicType) == "UICompatibilityInputViewController"
+        let strange = String(describing: inputViewController) == "UICompatibilityInputViewController"
+
         if strange {
             #if DEBUG
                 fatalError("UICompatibilityInputViewController")

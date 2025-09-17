@@ -48,10 +48,10 @@ internal class KeyboardShape {
 
         for shape in shapes {
             if let shape = shape {
-                self.fillPath.appendPath(shape.fillPath)
-                self.underPath.appendPath(shape.underPath)
-                self.edgePath.appendPath(shape.edgePath)
-                self.edgePaths.appendContentsOf(shape.edgePaths)
+                self.fillPath.append(shape.fillPath)
+                self.underPath.append(shape.underPath)
+                self.edgePath.append(shape.edgePath)
+                self.edgePaths.append(contentsOf: shape.edgePaths)
             }
         }
     }

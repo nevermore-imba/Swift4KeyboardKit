@@ -9,10 +9,10 @@
 import Foundation
 
 public final class KeyboardCommonActionKeyListener: KeyboardKeyListenerProtocol {
-    public func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    public func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
 
-        //let isTouchDown = controlEvents.contains(.TouchDown)
-        let isTouchUpInside = controlEvents.contains(.TouchUpInside)
+        //let isTouchDown = controlEvents.contains(.touchDown)
+        let isTouchUpInside = controlEvents.contains(.touchUpInside)
 
 //        if isTouchUpInside && key.type == .AdvanceToNextInputMode {
 //            self.inputViewController.advanceToNextInputMode()

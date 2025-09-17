@@ -38,7 +38,7 @@ public enum KeyboardKeyColorTypeOptional<T: Any> {
     }
 
     public func value(appearanceVariant: KeyboardKeyAppearanceVariant) -> T {
-        return self.value(appearanceVariant.keyColorType)
+        return self.value(keyColorType: appearanceVariant.keyColorType)
     }
 }
 
@@ -57,7 +57,7 @@ public enum KeyboardColorModeOptional<T: Any> {
     }
 
     public func value(appearanceVariant: KeyboardKeyAppearanceVariant) -> T {
-        return self.value(appearanceVariant.keyboardMode.colorMode)
+        return self.value(colorMode: appearanceVariant.keyboardMode.colorMode)
     }
 
 }
@@ -77,7 +77,7 @@ public enum KeyboardVibrancyModeOptional<T: Any> {
     }
 
     public func value(appearanceVariant: KeyboardKeyAppearanceVariant) -> T {
-        return self.value(appearanceVariant.keyboardMode.vibrancyMode)
+        return self.value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 }
 
@@ -106,7 +106,7 @@ public protocol KeyboardStructuredTheme: KeyboardTheme {
     var popupHighlightedTextColor: KeyboardThemeColorOptional { get }
 }
 
-public extension KeyboardStructuredTheme {
+extension KeyboardStructuredTheme {
     public var popupBodyColor: KeyboardThemeColorOptional { return self.keycapBodyColor }
     public var popupBorderColor: KeyboardThemeColorOptional { return self.keycapBorderColor }
     public var popupTextColor: KeyboardThemeColorOptional { return self.keycapTextColor }
@@ -121,88 +121,88 @@ public extension KeyboardStructuredTheme {
 extension KeyboardStructuredTheme {
 
     // # Keycap
-    public func keycapBodyColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapBodyColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.keycapBodyColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func keycapTextColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapTextColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.keycapTextColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func keycapBorderColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapBorderColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.keycapBorderColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func keycapBorderSizeWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> CGFloat {
+    public func keycapBorderSizeWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> CGFloat {
         return self.keycapBorderSize
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func keycapOuterShadowColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapOuterShadowColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.keycapOuterShadowColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
     // # Popup
-    public func popupBodyColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupBodyColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupBodyColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupTextColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupTextColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupTextColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupBorderColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupBorderColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupBorderColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupBorderSizeWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> CGFloat {
+    public func popupBorderSizeWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> CGFloat {
         return self.popupBorderSize
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupOuterShadowColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupOuterShadowColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupOuterShadowColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupHighlightedBackgroundColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupHighlightedBackgroundColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupHighlightedBackgroundColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 
-    public func popupHighlightedTextColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func popupHighlightedTextColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         return self.popupHighlightedTextColor
-            .value(appearanceVariant.keyColorType)
-            .value(appearanceVariant.keyboardMode.colorMode)
-            .value(appearanceVariant.keyboardMode.vibrancyMode)
+            .value(keyColorType: appearanceVariant.keyColorType)
+            .value(colorMode: appearanceVariant.keyboardMode.colorMode)
+            .value(vibrancyMode: appearanceVariant.keyboardMode.vibrancyMode)
     }
 }

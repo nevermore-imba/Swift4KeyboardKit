@@ -13,7 +13,7 @@ public let spanishKeyboardLayout: KeyboardLayout = {
     var keyboardLayout = qwertyKeyboardLayout
     keyboardLayout.language = "es"
 
-    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "ñ"), atIndex: keyboardLayout.pages[0].rows[2].count - 1)
+    keyboardLayout.pages[0].rows[2].insert(KeyboardKey(character: "ñ"), at: keyboardLayout.pages[0].rows[2].count - 1)
 
     return keyboardLayout
 } ()

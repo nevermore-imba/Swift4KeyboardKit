@@ -15,7 +15,7 @@ internal final class KeyboardEmojiCollectionSectionHeaderView: UICollectionReusa
 
     private var labelView: UILabel!
 
-    internal var emojiCategory: KeyboardEmojiCategory! {
+    internal var emojiCategory: KeyboardEmojiCategory = .None {
         didSet {
             if oldValue != self.emojiCategory {
                 self.updateEmojiCategory()
@@ -27,12 +27,12 @@ internal final class KeyboardEmojiCollectionSectionHeaderView: UICollectionReusa
         super.init(frame: frame)
 
         self.labelView = UILabel()
-        self.labelView.textAlignment = .Left
-        self.labelView.font = UIFont.systemFontOfSize(18.0)
+        self.labelView.textAlignment = .left
+        self.labelView.font = UIFont.systemFont(ofSize: 18.0)
 //        self.labelView.transform = CGAffineTransformMakeRotation(-90 * CGFloat(M_PI) / 180);
 
 //        self.layer.borderWidth = 1
-//        self.layer.borderColor = UIColor.redColor().CGColor
+//        self.layer.borderColor = UIColor.red.CGColor
 //
         self.addSubview(self.labelView)
     }
@@ -52,6 +52,6 @@ internal final class KeyboardEmojiCollectionSectionHeaderView: UICollectionReusa
     }
 
     private func updateEmojiCategory() {
-        self.labelView.text = String(self.emojiCategory)
+        self.labelView.text = String(describing: self.emojiCategory)
     }
 }

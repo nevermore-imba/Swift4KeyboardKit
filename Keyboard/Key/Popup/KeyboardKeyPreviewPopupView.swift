@@ -16,13 +16,13 @@ internal final class KeyboardKeyPreviewPopupView: KeyboardKeyPopupView {
         super.init(frame: frame)
 
         self.labelView = UILabel(frame: self.bounds)
-        self.labelView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        self.labelView.textAlignment = .Center
-        self.labelView.baselineAdjustment = .AlignCenters // TODO: Rethink!
-        self.labelView.font = UIFont.systemFontOfSize(44.0)
+        self.labelView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.labelView.textAlignment = .center
+        self.labelView.baselineAdjustment = .alignCenters // TODO: Rethink!
+        self.labelView.font = UIFont.systemFont(ofSize: 44.0)
         self.labelView.adjustsFontSizeToFitWidth = true
         self.labelView.minimumScaleFactor = CGFloat(0.1)
-        self.labelView.userInteractionEnabled = false
+        self.labelView.isUserInteractionEnabled = false
         self.labelView.numberOfLines = 1
         self.labelView.frame = self.bounds
         self.addSubview(self.labelView)

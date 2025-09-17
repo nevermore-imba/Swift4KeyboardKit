@@ -11,7 +11,7 @@ import Foundation
 
 extension KeyboardSuggestionModel {
 
-    public func generateGuesses(query: KeyboardSuggestionQuery, callback: ([KeyboardSuggestionGuess]) -> ()) {
+    public func generateGuesses(_ query: KeyboardSuggestionQuery, callback: @escaping ([KeyboardSuggestionGuess]) -> ()) {
         var results: (spellingGuesses: [KeyboardSuggestionGuess]?, emojiGuesses: [KeyboardSuggestionGuess]?) = (spellingGuesses: nil, emojiGuesses: nil)
 
         let processResults = { [weak self] in
@@ -24,8 +24,8 @@ extension KeyboardSuggestionModel {
             }
 
             var guesses: [KeyboardSuggestionGuess] = []
-            guesses.appendContentsOf(spellingGuesses)
-            guesses.appendContentsOf(emojiGuesses)
+            guesses.append(contentsOf: spellingGuesses)
+            guesses.append(contentsOf: emojiGuesses)
 
             callback(strongSelf.reduceGuesses(guesses))
         }
@@ -53,7 +53,7 @@ extension KeyboardSuggestionModel {
         processResults()
     }
 
-    private func reduceGuesses(guesses: [KeyboardSuggestionGuess]) -> [KeyboardSuggestionGuess] {
+    private func reduceGuesses(_ guesses: [KeyboardSuggestionGuess]) -> [KeyboardSuggestionGuess] {
         let autocapitalizeSpelling = self.shouldCapitalizeSpelling()
         let autocorrectSpelling = self.shouldСorrectSpelling()
         let autocompleteSpelling = autocorrectSpelling // Here it is different things but conseptualy their similar.

@@ -38,7 +38,7 @@ public final class KeyboardShiftStatusController {
     private var shouldEnableShiftStateAtSentenceBeginning: Bool {
         return
             self.enablesShiftStateAtSentenceBeginning &&
-            self.textDocumentProxy.autocapitalizationType == .Sentences
+            self.textDocumentProxy.autocapitalizationType == .sentences
     }
 
     internal init() {
@@ -72,7 +72,7 @@ public final class KeyboardShiftStatusController {
             return
         }
 
-        let isLastCharacterUppercaseLetter = cachedUppercaseLetterCharacterSet.characterIsMember(lastCharacter)
+        let isLastCharacterUppercaseLetter = (cachedUppercaseLetterCharacterSet as NSCharacterSet).characterIsMember(lastCharacter)
 
         self.shiftMode = isLastCharacterUppercaseLetter ? .Enabled : .Disabled
     }
@@ -96,11 +96,11 @@ public final class KeyboardShiftStatusController {
         // # ⬇️-cases:
         //  *  A⦚⬇️
 
-        var wasShiftEnable = self.shiftMode == .Enabled
+        let wasShiftEnable = self.shiftMode == .Enabled
         var wantsEnableShift = !wasShiftEnable
         var wantsDisableShift = wasShiftEnable
 
-        guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16 where utf16View.count > 0 else {
+        guard let utf16View = self.textDocumentProxy.documentContextBeforeInput?.utf16, utf16View.count > 0 else {
             // Case: Completely empty prefix.
             self.shiftMode = .Enabled
             return
@@ -112,8 +112,8 @@ public final class KeyboardShiftStatusController {
         var wasUppercaseCharacterFound = false
         var wasLowercaseCharacterFound = false
 
-        var areAllCharactersBeforeEndOfSentenceWhitespaces = false
-        for character in utf16View.reverse() {
+        // var areAllCharactersBeforeEndOfSentenceWhitespaces = false
+        for character in utf16View.reversed() {
             guard wantsEnableShift || wantsDisableShift else {
                 break
             }
@@ -196,12 +196,12 @@ extension KeyboardShiftStatusController: KeyboardTextDocumentObserver {
             self.shouldEnableShiftStateAtSentenceBeginning
     }
 
-    public func keyboardTextDocumentDidInsertText(text: String) {
+    public func keyboardTextDocumentDidInsertText(_ text: String) {
         guard let lastCharacter = text.utf16.last else {
             return
         }
 
-        if NSCharacterSet.whitespaceAndNewlineCharacterSet().characterIsMember(lastCharacter) {
+        if CharacterSet.whitespacesAndNewlines.characterIsMember(lastCharacter) {
             self.toggleShiftIfNeeded()
         }
     }

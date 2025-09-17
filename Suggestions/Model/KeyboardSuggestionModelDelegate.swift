@@ -9,15 +9,7 @@
 import Foundation
 
 
-public protocol KeyboardSuggestionModelDelegate: class {
-    func suggestionModelWillUpdateGuesses(query query: KeyboardSuggestionQuery)
-    func suggestionModelDidUpdateGuesses(query query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess])
+public protocol KeyboardSuggestionModelDelegate: AnyObject {
+    func suggestionModelWillUpdateGuesses(query: KeyboardSuggestionQuery)
+    func suggestionModelDidUpdateGuesses(query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess])
 }
-
-/*
-// # Optional methods
-extension KeyboardSuggestionModelDelegate {
-    public func suggestionModelWillUpdateGuesses(query query: KeyboardSuggestionQuery) {}
-    public func suggestionModelDidUpdateGuesses(query query: KeyboardSuggestionQuery, guesses: [KeyboardSuggestionGuess]) {}
-}
-*/

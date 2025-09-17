@@ -11,14 +11,14 @@ import Foundation
 
 internal final class KeyboardShiftController: KeyboardKeyListenerProtocol {
 
-    internal func keyViewDidSendEvent(keyEvent: KeyboardKeyEvent) {
+    internal func keyViewDidSendEvent(_ keyEvent: KeyboardKeyEvent) {
         let controlEvents = keyEvent.controlEvents
         let key = keyEvent.key
         let keyboardViewController = keyEvent.keyboardViewController
 
         if
             key.type == .Shift &&
-            controlEvents == .TouchDown
+            controlEvents == .touchDown
         {
             keyboardViewController.keyboardMode.shiftMode.toggle()
             return
@@ -26,14 +26,14 @@ internal final class KeyboardShiftController: KeyboardKeyListenerProtocol {
 
         if
             key.type == .Shift &&
-            controlEvents == .TouchDownRepeat
+            controlEvents == .touchDownRepeat
         {
             keyboardViewController.keyboardMode.shiftMode.toggleLock()
             return
         }
 
         if
-            controlEvents == .TouchUpInside &&
+            controlEvents == .touchUpInside &&
             keyboardViewController.keyboardMode.shiftMode == .Enabled &&
 
             // TODO: Rethink: This is not universal workaround.

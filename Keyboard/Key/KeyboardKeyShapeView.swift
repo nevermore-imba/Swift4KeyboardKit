@@ -20,19 +20,21 @@ PERFORMANCE NOTES
 
 internal class KeyboardKeyShapeView: UIView {
 
-    var shapeLayer: CAShapeLayer?
+    var shapeLayer: CAShapeLayer? {
+        return layer as? CAShapeLayer
+    }
 
-    override class func layerClass() -> AnyClass {
+    override class var layerClass: AnyClass {
         return CAShapeLayer.self
     }
+
     convenience init() {
         self.init(frame: CGRectZero)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.userInteractionEnabled = false
-        self.shapeLayer = self.layer as? CAShapeLayer
+        self.isUserInteractionEnabled = false
 
         // optimization: off by default to ensure quick mode transitions; re-enable during rotations
         //self.layer.shouldRasterize = true
@@ -47,7 +49,7 @@ internal class KeyboardKeyShapeView: UIView {
     var curve: UIBezierPath? {
         didSet {
             if let layer = self.shapeLayer {
-                layer.path = curve?.CGPath
+                layer.path = curve?.cgPath
             }
             else {
                 self.setNeedsDisplay()
@@ -58,7 +60,7 @@ internal class KeyboardKeyShapeView: UIView {
     var fillColor: UIColor? {
         didSet {
             if let layer = self.shapeLayer {
-                layer.fillColor = fillColor?.CGColor
+                layer.fillColor = fillColor?.cgColor
             }
             else {
                 self.setNeedsDisplay()
@@ -69,7 +71,7 @@ internal class KeyboardKeyShapeView: UIView {
     var strokeColor: UIColor? {
         didSet {
             if let layer = self.shapeLayer {
-                layer.strokeColor = strokeColor?.CGColor
+                layer.strokeColor = strokeColor?.cgColor
             }
             else {
                 self.setNeedsDisplay()

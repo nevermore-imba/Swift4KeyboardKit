@@ -9,7 +9,7 @@
 import Foundation
 
 public struct KeyboardKeyEvent {
-    public let controlEvents: UIControlEvents
+    public let controlEvents: UIControl.Event
     public let event: UIEvent
     public let key: KeyboardKey
     public let keyView: KeyboardKeyView

@@ -26,24 +26,5 @@ extension KeyboardAppearanceVariant {
 }
 
 
-// # Equatable
-extension KeyboardAppearanceVariant: Equatable {
-}
-
-public func ==(lhs: KeyboardAppearanceVariant, rhs: KeyboardAppearanceVariant) -> Bool {
-    return
-        lhs.colorMode == rhs.colorMode &&
-        lhs.vibrancyMode == rhs.vibrancyMode &&
-        lhs.sizeMode == rhs.sizeMode
-}
-
-
-// # Hashable
-extension KeyboardAppearanceVariant: Hashable {
-    public var hashValue: Int {
-        return
-            self.colorMode.hashValue +
-            self.vibrancyMode.hashValue << 4 +
-            self.sizeMode.hashValue << 8
-    }
-}
+extension KeyboardAppearanceVariant: Equatable {}
+extension KeyboardAppearanceVariant: Hashable {}

@@ -17,23 +17,23 @@ internal class KeyboardRegistry {
     private var suggestionModels = WeakSet<KeyboardSuggestionModel>()
 
     // # KeyboardViewController
-    internal func registerKeyboardViewController(keyboardViewController: KeyboardViewController) {
+    internal func registerKeyboardViewController(_ keyboardViewController: KeyboardViewController) {
         self.keyboardViewControllers.insert(keyboardViewController)
         self.synchronize()
     }
 
-    internal func unregisterKeyboardViewController(keyboardViewController: KeyboardViewController) {
+    internal func unregisterKeyboardViewController(_ keyboardViewController: KeyboardViewController) {
         self.keyboardViewControllers.remove(keyboardViewController)
         self.synchronize()
     }
 
     // # KeyboardSuggestionModel
-    internal func registerSuggestionModel(suggestionModel: KeyboardSuggestionModel) {
+    internal func registerSuggestionModel(_ suggestionModel: KeyboardSuggestionModel) {
         self.suggestionModels.insert(suggestionModel)
         self.synchronize()
     }
 
-    internal func unregisterSuggestionModel(suggestionModel: KeyboardSuggestionModel) {
+    internal func unregisterSuggestionModel(_ suggestionModel: KeyboardSuggestionModel) {
         self.suggestionModels.remove(suggestionModel)
         self.synchronize()
     }

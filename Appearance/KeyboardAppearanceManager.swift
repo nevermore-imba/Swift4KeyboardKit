@@ -21,21 +21,21 @@ public final class KeyboardAppearanceManager {
         self.theme = KeyboardStandardTheme()
     }
 
-    internal func createAppearanceForVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> KeyboardKeyAppearance {
+    internal func createAppearanceForVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> KeyboardKeyAppearance {
         var appearance = KeyboardKeyAppearance()
 
         appearance.keycapTextColor = self.theme.keycapTextColorWithAppearanceVariant(appearanceVariant)
         appearance.keycapBodyColor = self.theme.keycapBodyColorWithAppearanceVariant(appearanceVariant)
         appearance.keycapBorderColor = self.theme.keycapBorderColorWithAppearanceVariant(appearanceVariant)
-        appearance.keycapOuterShadowColor = self.theme.keycapOuterShadowColorWithAppearanceVariant(appearanceVariant)
+        appearance.keycapOuterShadowColor = self.theme.keycapOuterShadowColorWithAppearanceVariant( appearanceVariant)
         appearance.keycapBorderSize = self.theme.keycapBorderSizeWithAppearanceVariant(appearanceVariant)
 
         appearance.popupTextColor = self.theme.popupTextColorWithAppearanceVariant(appearanceVariant)
         appearance.popupBodyColor = self.theme.popupBodyColorWithAppearanceVariant(appearanceVariant)
         appearance.popupBorderColor = self.theme.popupBorderColorWithAppearanceVariant(appearanceVariant)
-        appearance.popupOuterShadowColor = self.theme.popupOuterShadowColorWithAppearanceVariant(appearanceVariant)
+        appearance.popupOuterShadowColor = self.theme.popupOuterShadowColorWithAppearanceVariant( appearanceVariant)
         appearance.popupBorderSize = self.theme.popupBorderSizeWithAppearanceVariant(appearanceVariant)
-        appearance.popupHighlightedTextColor = self.theme.popupHighlightedTextColorWithAppearanceVariant(appearanceVariant)
+        appearance.popupHighlightedTextColor = self.theme.popupHighlightedTextColorWithAppearanceVariant( appearanceVariant)
         appearance.popupHighlightedBackgroundColor = self.theme.popupHighlightedBackgroundColorWithAppearanceVariant(appearanceVariant)
 
 
@@ -57,7 +57,7 @@ public final class KeyboardAppearanceManager {
         return appearance
     }
 
-    public func appearanceForVariant(variant: KeyboardKeyAppearanceVariant) -> KeyboardKeyAppearance {
+    public func appearanceForVariant(_ variant: KeyboardKeyAppearanceVariant) -> KeyboardKeyAppearance {
         if let appearance = cache[variant] {
             return appearance
         }

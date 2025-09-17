@@ -11,7 +11,7 @@ import UIKit
 
 internal final class KeyboardAlternateKeyView: UIView {
 
-    internal var appearance: KeyboardKeyAppearance!
+    internal var appearance: KeyboardKeyAppearance?
 
     internal var labelView: UILabel!
 
@@ -19,12 +19,12 @@ internal final class KeyboardAlternateKeyView: UIView {
         super.init(frame: frame)
 
         self.labelView = UILabel()
-        self.labelView.textAlignment = .Center
-        self.labelView.baselineAdjustment = .AlignCenters // TODO: Rethink!
-        self.labelView.userInteractionEnabled = false
+        self.labelView.textAlignment = .center
+        self.labelView.baselineAdjustment = .alignCenters // TODO: Rethink!
+        self.labelView.isUserInteractionEnabled = false
         self.labelView.numberOfLines = 1
         self.addSubview(self.labelView)
-        self.backgroundColor = UIColor.grayColor()
+        self.backgroundColor = UIColor.gray
     }
 
     internal required init?(coder aDecoder: NSCoder) {
@@ -36,7 +36,7 @@ internal final class KeyboardAlternateKeyView: UIView {
             self.updateContent()
         }
     }
-    internal var highlighted: Bool = false {
+    internal var isHighlighted: Bool = false {
         didSet {
             self.updateContent()
         }
@@ -44,14 +44,14 @@ internal final class KeyboardAlternateKeyView: UIView {
 
     func updateContent() {
         let appearance = self.appearance
-        let highlighted = self.highlighted
+        let isHighlighted = self.isHighlighted
 
-        self.labelView.font = appearance.keycapTextFont
+        self.labelView.font = appearance?.keycapTextFont
         self.labelView.text = self.key.label?.labelWithShiftMode(.Disabled)
 
-        self.layer.cornerRadius = appearance.bodyCornerRadius
-        self.labelView.textColor = highlighted ? appearance.popupHighlightedTextColor : appearance.popupTextColor
-        self.backgroundColor = highlighted ? appearance.popupHighlightedBackgroundColor : UIColor.clearColor()
+        self.layer.cornerRadius = appearance?.bodyCornerRadius ?? 0
+        self.labelView.textColor = isHighlighted ? appearance?.popupHighlightedTextColor : appearance?.popupTextColor
+        self.backgroundColor = isHighlighted ? appearance?.popupHighlightedBackgroundColor : UIColor.clear
     }
 
     private var labelViewPadding: CGPoint {
@@ -64,7 +64,7 @@ internal final class KeyboardAlternateKeyView: UIView {
         self.labelView.frame = self.bounds.insetBy(dx: -self.labelViewPadding.x, dy: -self.labelViewPadding.y)
     }
 
-    override func sizeThatFits(baseSize: CGSize) -> CGSize {
+    override func sizeThatFits(_ baseSize: CGSize) -> CGSize {
         var size = self.labelView.sizeThatFits(baseSize - self.labelViewPadding) + self.labelViewPadding
         size.width = max(size.width, 24)
         return size

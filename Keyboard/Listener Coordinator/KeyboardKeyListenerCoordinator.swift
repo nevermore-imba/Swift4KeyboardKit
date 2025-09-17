@@ -24,17 +24,17 @@ public final class KeyboardKeyListenerCoordinator {
 
     // # Public
 
-    public func addListener(listener: KeyboardKeyListenerProtocol) {
+    public func addListener(_ listener: KeyboardKeyListenerProtocol) {
         self.listeners.addListener(listener)
     }
 
-    public func removeListener(listener: KeyboardKeyListenerProtocol) {
+    public func removeListener(_ listener: KeyboardKeyListenerProtocol) {
         self.listeners.addListener(listener)
     }
 
     // # Internal
 
-    internal func keyViewDidSendControlEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, event: UIEvent) {
+    internal func keyViewDidSendControlEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, event: UIEvent) {
         guard let keyboardViewController = self.keyboardViewController else {
             return
         }

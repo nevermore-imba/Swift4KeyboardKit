@@ -9,29 +9,29 @@
 import Foundation
 
 // # Mess
-private let bodyColor_RegularType_LightColorMode_TransparentVibrancy: UIColor = UIColor.whiteColor()
-private let bodyColor_RegularType_DarkColorMode_TransparentVibrancy: UIColor = UIColor.whiteColor().colorWithAlphaComponent(CGFloat(0.3))
+private let bodyColor_RegularType_LightColorMode_TransparentVibrancy: UIColor = UIColor.white
+private let bodyColor_RegularType_DarkColorMode_TransparentVibrancy: UIColor = UIColor.white.withAlphaComponent(CGFloat(0.3))
 private let bodyColor_RegularType_LightColorMode_OpaqueVibrancy: UIColor = bodyColor_RegularType_LightColorMode_TransparentVibrancy
 private let bodyColor_RegularType_DarkColorMode_OpaqueVibrancy: UIColor = UIColor(red: CGFloat(83)/CGFloat(255), green: CGFloat(83)/CGFloat(255), blue: CGFloat(83)/CGFloat(255), alpha: 1)
 
 private let bodyColor_SpecialType_LightColorMode_TransparentVibrancy: UIColor = bodyColor_SpecialType_LightColorMode_OpaqueVibrancy
 private let bodyColor_SpecialType_LightColorMode_OpaqueVibrancy: UIColor = UIColor(red: CGFloat(177)/CGFloat(255), green: CGFloat(177)/CGFloat(255), blue: CGFloat(177)/CGFloat(255), alpha: 1)
-private let bodyColor_SpecialType_DarkColorMode_TransparentVibrancy: UIColor = UIColor.grayColor().colorWithAlphaComponent(CGFloat(0.3))
+private let bodyColor_SpecialType_DarkColorMode_TransparentVibrancy: UIColor = UIColor.gray.withAlphaComponent(CGFloat(0.3))
 private let bodyColor_SpecialType_DarkColorMode_OpaqueVibrancy: UIColor = UIColor(red: CGFloat(45)/CGFloat(255), green: CGFloat(45)/CGFloat(255), blue: CGFloat(45)/CGFloat(255), alpha: 1)
 
 private let popupColor_LightColorMode_TransparentVibrancy: UIColor = bodyColor_RegularType_LightColorMode_TransparentVibrancy
 private let popupColor_LightColorMode_OpaqueVibrancy: UIColor = popupColor_LightColorMode_TransparentVibrancy
-private let popupColor_DarkColorMode_TransparentVibrancy: UIColor = bodyColor_RegularType_DarkColorMode_OpaqueVibrancy//UIColor.grayColor()
+private let popupColor_DarkColorMode_TransparentVibrancy: UIColor = bodyColor_RegularType_DarkColorMode_OpaqueVibrancy//UIColor.gray
 private let popupColor_DarkColorMode_OpaqueVibrancy: UIColor = bodyColor_RegularType_DarkColorMode_OpaqueVibrancy
 
 private let underColor_LightColorMode: UIColor = UIColor(hue: (220/360.0), saturation: 0.04, brightness: 0.56, alpha: 1)
 private let underColor_DarkColorMode: UIColor = UIColor(red: CGFloat(38.6)/CGFloat(255), green: CGFloat(18)/CGFloat(255), blue: CGFloat(39.3)/CGFloat(255), alpha: 0.4)
 
-private let textColor_LightColorMode: UIColor = UIColor.blackColor()
-private let textColor_DarkColorMode: UIColor = UIColor.whiteColor()
+private let textColor_LightColorMode: UIColor = UIColor.black
+private let textColor_DarkColorMode: UIColor = UIColor.white
 
 private let borderColor_LightColorMode: UIColor = UIColor(hue: (214/360.0), saturation: 0.04, brightness: 0.65, alpha: 1.0)
-private let borderColor_DarkColorMode: UIColor = UIColor.clearColor()
+private let borderColor_DarkColorMode: UIColor = UIColor.clear
 
 
 // # Something super special
@@ -79,7 +79,7 @@ public struct KeyboardStandardTheme: KeyboardStructuredTheme {
     public var keycapBorderColor: KeyboardThemeColorOptional =
         .IdenticalKeyColorType(
             .IdenticalColorMode(
-                .IdenticalVibrancyMode(UIColor.clearColor())
+                .IdenticalVibrancyMode(UIColor.clear)
             )
         )
 
@@ -138,7 +138,7 @@ public struct KeyboardStandardTheme: KeyboardStructuredTheme {
 
     // Custom hooks
 
-    public func keycapBodyColorWithAppearanceVariant(appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
+    public func keycapBodyColorWithAppearanceVariant(_ appearanceVariant: KeyboardKeyAppearanceVariant) -> UIColor {
         // Idea: Selected Shift key in dark color mode looks differently.
         if
             appearanceVariant.keyMode.selectionMode == .Selected &&
@@ -167,9 +167,9 @@ public struct KeyboardStandardTheme: KeyboardStructuredTheme {
         }
 
         return self.keycapBodyColor
-            .value(keyColorType)
-            .value(appearanceVariant)
-            .value(appearanceVariant)
+            .value(keyColorType: keyColorType)
+            .value(appearanceVariant: appearanceVariant)
+            .value(appearanceVariant: appearanceVariant)
     }
 
 }

@@ -16,7 +16,7 @@ public struct KeyboardPage {
         self.rows = []
     }
 
-    mutating func ensureRowExists(rowNumber: Int) {
+    mutating func ensureRowExists(_ rowNumber: Int) {
         guard self.rows.count <= rowNumber else {
             return
         }
@@ -26,12 +26,12 @@ public struct KeyboardPage {
         }
     }
 
-    public mutating func prependKey(key: KeyboardKey, row: Int) {
+    public mutating func prependKey(_ key: KeyboardKey, row: Int) {
         self.ensureRowExists(row)
-        self.rows[row].insert(key, atIndex: 0)
+        self.rows[row].insert(key, at: 0)
     }
 
-    public mutating func appendKey(key: KeyboardKey, row: Int) {
+    public mutating func appendKey(_ key: KeyboardKey, row: Int) {
         self.ensureRowExists(row)
         self.rows[row].append(key)
     }

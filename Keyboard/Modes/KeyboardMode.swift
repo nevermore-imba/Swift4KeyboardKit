@@ -35,7 +35,7 @@ extension KeyboardMode {
     }
 
     public init(textInputTraits: UITextInputTraits) {
-        self.colorMode = KeyboardColorMode(keyboardAppearance: textInputTraits.keyboardAppearance ?? .Default)
+        self.colorMode = KeyboardColorMode(keyboardAppearance: textInputTraits.keyboardAppearance ?? .default)
         self.sizeMode = KeyboardSizeMode.suitable()
     }
 
@@ -44,30 +44,5 @@ extension KeyboardMode {
     }
 }
 
-
-
-// # Equitable
-extension KeyboardMode: Equatable {
-}
-
-public func ==(lhs: KeyboardMode, rhs: KeyboardMode) -> Bool {
-    return
-        lhs.pageNumber == rhs.pageNumber &&
-        lhs.colorMode == rhs.colorMode &&
-        lhs.vibrancyMode == rhs.vibrancyMode &&
-        lhs.shiftMode == rhs.shiftMode &&
-        lhs.sizeMode == rhs.sizeMode
-}
-
-
-// # Hashable
-extension KeyboardMode: Hashable {
-    public var hashValue: Int {
-        return
-            self.pageNumber +
-            self.colorMode.rawValue << 2 +
-            self.vibrancyMode.rawValue << 3 +
-            self.shiftMode.rawValue << 4 +
-            self.sizeMode.rawValue << 5
-    }
-}
+extension KeyboardMode: Equatable {}
+extension KeyboardMode: Hashable {}

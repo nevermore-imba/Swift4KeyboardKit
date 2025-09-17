@@ -19,8 +19,8 @@ public struct KeyboardKeyOutput {
     }
 
     public init(automated: String) {
-        self.lowercase = automated.lowercaseString
-        self.uppercase = automated.uppercaseString
+        self.lowercase = automated.lowercased()
+        self.uppercase = automated.uppercased()
     }
 
     public init(lowercase: String, uppercase: String) {
@@ -28,7 +28,7 @@ public struct KeyboardKeyOutput {
         self.uppercase = uppercase
     }
 
-    internal func outputWithShiftMode(shiftMode: KeyboardShiftMode) -> String {
+    internal func outputWithShiftMode(_ shiftMode: KeyboardShiftMode) -> String {
         if shiftMode.needCapitalize() {
             return self.uppercase
         }

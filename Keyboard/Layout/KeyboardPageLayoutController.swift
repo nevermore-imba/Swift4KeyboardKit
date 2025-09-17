@@ -57,7 +57,7 @@ internal final class KeyboardPageLayoutController {
 
         let mostKeysInRow: Int = {
             var currentMax: Int = 0
-            for (_, row) in page.rows.enumerate() {
+            for (_, row) in page.rows.enumerated() {
                 currentMax = max(currentMax, row.count)
             }
             return currentMax
@@ -79,14 +79,14 @@ internal final class KeyboardPageLayoutController {
             return returnWidth.rounded()
         }()
 
-        let processRow = { (row: [KeyboardKey], frames: [CGRect], inout map: [KeyboardKey:CGRect]) -> Void in
+        let processRow = { (row: [KeyboardKey], frames: [CGRect], map: inout [KeyboardKey:CGRect]) -> Void in
             assert(row.count == frames.count, "row and frames don't match")
-            for (k, key) in row.enumerate() {
+            for (k, key) in row.enumerated() {
                 map[key] = frames[k]
             }
         }
 
-        for (r, row) in page.rows.enumerate() {
+        for (r, row) in page.rows.enumerated() {
             let rowGapCurrentTotal = (r == page.rows.count - 1 ? rowGapTotal : CGFloat(r) * rowGap)
 
             let frame = CGRectMake(
@@ -118,7 +118,7 @@ internal final class KeyboardPageLayoutController {
     }
 
 
-    private func framesForCharacterRow(row: [KeyboardKey], keyWidth: CGFloat, gapWidth: CGFloat, frame: CGRect) -> [CGRect] {
+    private func framesForCharacterRow(_ row: [KeyboardKey], keyWidth: CGFloat, gapWidth: CGFloat, frame: CGRect) -> [CGRect] {
         var frames = [CGRect]()
 
         let keySpace = CGFloat(row.count) * keyWidth + CGFloat(row.count - 1) * gapWidth
@@ -134,7 +134,7 @@ internal final class KeyboardPageLayoutController {
 
         var currentOrigin = frame.origin.x + sideSpace
 
-        for (_, _) in row.enumerate() {
+        for (_, _) in row.enumerated() {
             let roundedOrigin = currentOrigin.rounded()
 
             // avoiding rounding errors
@@ -152,11 +152,11 @@ internal final class KeyboardPageLayoutController {
     }
 
     // TODO: pass in actual widths instead
-    private func framesForCharacterWithSidesRow(row: [KeyboardKey], frame: CGRect, isLandscape: Bool, keyWidth: CGFloat, keyGap: CGFloat) -> [CGRect] {
+    private func framesForCharacterWithSidesRow(_ row: [KeyboardKey], frame: CGRect, isLandscape: Bool, keyWidth: CGFloat, keyGap: CGFloat) -> [CGRect] {
         var frames = [CGRect]()
 
         let standardFullKeyCount = Int(self.layoutConstants.keyCompressedThreshhold) - 1
-        let standardGap = (isLandscape ? self.layoutConstants.keyGapLandscape : self.layoutConstants.keyGapPortrait)(frame.width, rowCharacterCount: standardFullKeyCount)
+        let standardGap = isLandscape ? self.layoutConstants.keyGapLandscape(frame.width, rowCharacterCount: standardFullKeyCount) : self.layoutConstants.keyGapPortrait(frame.width, rowCharacterCount: standardFullKeyCount)
         let sideEdges = (isLandscape ? self.layoutConstants.sideEdgesLandscape : self.layoutConstants.sideEdgesPortrait(frame.width))
         var standardKeyWidth = (frame.width - sideEdges - (standardGap * CGFloat(standardFullKeyCount - 1)) - sideEdges)
         standardKeyWidth /= CGFloat(standardFullKeyCount)
@@ -181,7 +181,7 @@ internal final class KeyboardPageLayoutController {
         let specialCharacterGap = sideSpace - specialCharacterWidth
 
         var currentOrigin = frame.origin.x
-        for (k, _) in row.enumerate() {
+        for (k, _) in row.enumerated() {
             if k == 0 {
                 frames.append(CGRectMake(currentOrigin.rounded(), frame.origin.y, specialCharacterWidth, frame.height))
                 currentOrigin += (specialCharacterWidth + specialCharacterGap)
@@ -205,13 +205,13 @@ internal final class KeyboardPageLayoutController {
         return frames
     }
 
-    private func framesForSpecialKeysRow(row: [KeyboardKey], keyWidth: CGFloat, gapWidth: CGFloat, leftSideRatio: CGFloat, rightSideRatio: CGFloat, micButtonRatio: CGFloat, isLandscape: Bool, frame: CGRect) -> [CGRect] {
+    private func framesForSpecialKeysRow(_ row: [KeyboardKey], keyWidth: CGFloat, gapWidth: CGFloat, leftSideRatio: CGFloat, rightSideRatio: CGFloat, micButtonRatio: CGFloat, isLandscape: Bool, frame: CGRect) -> [CGRect] {
         var frames = [CGRect]()
 
         var keysBeforeSpace = 0
         var keysAfterSpace = 0
         var reachedSpace = false
-        for (_, key) in row.enumerate() {
+        for (_, key) in row.enumerated() {
             if key.type == .Space {
                 reachedSpace = true
             }
@@ -249,7 +249,7 @@ internal final class KeyboardPageLayoutController {
 
         var currentOrigin = frame.origin.x
         var beforeSpace: Bool = true
-        for (k, key) in row.enumerate() {
+        for (k, key) in row.enumerated() {
             if key.type == .Space {
                 frames.append(CGRectMake(currentOrigin.rounded(), frame.origin.y, spaceWidth, frame.height))
                 currentOrigin += (spaceWidth + gapWidth)

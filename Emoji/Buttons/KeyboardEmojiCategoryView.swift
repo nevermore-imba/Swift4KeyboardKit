@@ -40,7 +40,7 @@ public class KeyboardEmojiCategoryView: KeyboardDrawableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.opaque = false
+        self.isOpaque = false
     }
 
     public required init(coder aDecoder: NSCoder) {
@@ -48,29 +48,29 @@ public class KeyboardEmojiCategoryView: KeyboardDrawableView {
     }
 
     func drawSelection() {
-        let ovalPath = UIBezierPath(ovalInRect: CGRectMake(-12, -12, 24, 24))
-        UIColor.grayColor().setFill()
+        let ovalPath = UIBezierPath(ovalIn: CGRectMake(-12, -12, 24, 24))
+        UIColor.gray.setFill()
         ovalPath.fill()
     }
 
-    public override var highlighted: Bool {
+    public override var isHighlighted: Bool {
         didSet {
-            self.alpha = self.highlighted ? 0.5 : 1.0
+            self.alpha = self.isHighlighted ? 0.5 : 1.0
         }
     }
 
-    public override var selected: Bool {
+    public override var isSelected: Bool {
         didSet {
             self.setNeedsDisplay()
         }
     }
 
-    public var selectedTintColor: UIColor = UIColor.clearColor()
-    public var selectedCircleTintColor: UIColor = UIColor.clearColor()
+    public var selectedTintColor: UIColor = UIColor.clear
+    public var selectedCircleTintColor: UIColor = UIColor.clear
 
     public override var tintColor: UIColor! {
         get {
-            return self.selected ? self.selectedTintColor : super.tintColor
+            return self.isSelected ? self.selectedTintColor : super.tintColor
         }
 
         set {
@@ -79,8 +79,8 @@ public class KeyboardEmojiCategoryView: KeyboardDrawableView {
     }
 
     internal override func draw() {
-        if self.selected {
-            let circlePath = UIBezierPath(ovalInRect: CGRectMake(-13, -13, 26, 26))
+        if self.isSelected {
+            let circlePath = UIBezierPath(ovalIn: CGRectMake(-13, -13, 26, 26))
             self.selectedCircleTintColor.setFill()
             circlePath.fill()
         }

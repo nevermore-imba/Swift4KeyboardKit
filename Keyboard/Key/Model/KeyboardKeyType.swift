@@ -67,7 +67,7 @@ extension KeyboardKeyType: Hashable {
 
 public extension KeyboardKeyType {
 
-    static func typeFromCharacter(character: Swift.Character) -> KeyboardKeyType {
+    internal static func typeFromCharacter(_ character: Swift.Character) -> KeyboardKeyType {
         switch character {
         case ".":
             return .Period
@@ -80,7 +80,7 @@ public extension KeyboardKeyType {
         }
     }
 
-    public var isSpecial: Bool {
+    var isSpecial: Bool {
         get {
             switch self {
             case .Shift:
@@ -101,11 +101,11 @@ public extension KeyboardKeyType {
         }
     }
 
-    public func suitableColorType() -> KeyboardKeyColorType {
+    func suitableColorType() -> KeyboardKeyColorType {
         return self.isSpecial ? .Special : .Regular
     }
 
-    public var isCharacter: Bool {
+    var isCharacter: Bool {
         get {
             switch self {
             case
@@ -118,7 +118,7 @@ public extension KeyboardKeyType {
         }
     }
 
-    public var isCharacterOrSomethingLikeThis: Bool {
+    var isCharacterOrSomethingLikeThis: Bool {
         get {
             switch self {
             case

@@ -39,7 +39,7 @@ internal class KeyboardNumericKeysView: UIView {
         for keyType in keyTypes {
             let keyView = KeyboardNumericKeyView()
             keyView.keyType = keyType
-            keyView.addTarget(self, action: #selector(self.handleKey(_:)), forControlEvents: .TouchUpInside)
+            keyView.addTarget(self, action: #selector(self.handleKey(_:)), for: .touchUpInside)
             self.addSubview(keyView)
             self.keyViews.append(keyView)
         }
@@ -77,7 +77,7 @@ internal class KeyboardNumericKeysView: UIView {
         }
     }
 
-    public dynamic func handleKey(keyView: KeyboardNumericKeyView) {
+    @objc public func handleKey(_ keyView: KeyboardNumericKeyView) {
         guard let textDocumentProxy = UIInputViewController.optionalRootInputViewController?.textDocumentProxy else {
             return
         }
@@ -85,7 +85,7 @@ internal class KeyboardNumericKeysView: UIView {
         KeyboardSoundService.sharedInstance.playInputSound()
 
         switch keyView.keyType {
-        case .Number(let number, let _):
+        case .Number(let number, _):
             textDocumentProxy.insertText(String(number))
             break
         case .Backspace:

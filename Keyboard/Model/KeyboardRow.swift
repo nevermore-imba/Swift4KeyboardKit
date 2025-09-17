@@ -10,7 +10,7 @@ import Foundation
 
 typealias KeyboardRow = Array<KeyboardKey>
 
-extension CollectionType where Generator.Element == KeyboardKey, Self.Index == Int {
+extension Collection where Element == KeyboardKey, Index == Int {
 
     func isCharacterRowHeuristic() -> Bool {
         return

@@ -18,10 +18,9 @@ internal enum KeyboardNumericKeyType {
 
 extension KeyboardNumericKeyType {
     internal var isSpecial: Bool {
-        if case Number(let number, let letters) = self {
+        if case .Number = self {
             return false
         }
-
         return true
     }
 }

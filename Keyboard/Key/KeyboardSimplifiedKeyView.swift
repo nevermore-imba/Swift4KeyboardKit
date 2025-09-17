@@ -8,11 +8,11 @@
 
 import UIKit
 
-private var kvoStateContext = 0
-
 public class KeyboardSimplifiedKeyView: KeyboardKeyView {
 
-    public var appearanceAdjustCallback: ((appearance: KeyboardKeyAppearance, keyView: KeyboardSimplifiedKeyView) -> (KeyboardKeyAppearance))?
+    public var appearanceAdjustCallback: ((_ appearance: KeyboardKeyAppearance, _ keyView: KeyboardSimplifiedKeyView) -> (KeyboardKeyAppearance))?
+
+    private var highlightedValueObservation: NSKeyValueObservation?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,11 +21,13 @@ public class KeyboardSimplifiedKeyView: KeyboardKeyView {
         
         KeyboardTextDocumentCoordinator.sharedInstance.addObserver(self)
 
-        self.addObserver(self, forKeyPath: "highlighted", options: .New, context: &kvoStateContext)
-    }
+        highlightedValueObservation = observe(\.isHighlighted, options: .new, changeHandler: { [weak self] keyView, change in
+            guard let self else { return }
+            let highlighted = change.newValue ?? keyView.isHighlighted
+            self.keyMode.highlightMode = highlighted ? .Highlighted : .None
+            self.applySuitableAppearance()
+        })
 
-    deinit {
-        self.removeObserver(self, forKeyPath: "highlighted", context: &kvoStateContext)
     }
 
     public required init?(coder: NSCoder) {
@@ -34,13 +36,13 @@ public class KeyboardSimplifiedKeyView: KeyboardKeyView {
 
     internal override func updateAppearance() {
         if let callback = self.appearanceAdjustCallback {
-            self.appearance = callback(appearance: self.appearance, keyView: self)
+            self.appearance = callback(self.appearance, self)
         }
 
         super.updateAppearance()
     }
 
-    public override func intrinsicContentSize() -> CGSize {
+    public override var intrinsicContentSize: CGSize {
         var size: CGSize = CGSize()
         switch self.keyboardMode.sizeMode {
         case .Small:
@@ -90,22 +92,10 @@ public class KeyboardSimplifiedKeyView: KeyboardKeyView {
         self.updateIfNeeded()
     }
 
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if context == &kvoStateContext {
-            if let highlighted = change?[NSKeyValueChangeNewKey] as? Bool {
-                self.keyMode.highlightMode = highlighted ? .Highlighted : .None
-                self.applySuitableAppearance()
-            }
-        }
-        else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
-        }
-    }
-
 }
 
 extension KeyboardSimplifiedKeyView: KeyboardTextDocumentObserver {
-    public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {
+    public func keyboardTextInputTraitsDidChange(_ textInputTraits: UITextInputTraits) {
         self.applySuitableAppearance()
     }
 }

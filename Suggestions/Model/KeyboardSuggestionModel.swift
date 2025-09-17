@@ -51,25 +51,25 @@ public final class KeyboardSuggestionModel {
     internal func shouldSuggestSpelling() -> Bool {
         return
             self.isSpellingSuggestionsEnabled &&
-            self.textDocumentProxy?.spellCheckingType ?? .Default != .No
+            self.textDocumentProxy?.spellCheckingType ?? .default != .no
     }
 
     internal func shouldСorrectSpelling() -> Bool {
         return
             self.shouldSuggestSpelling() &&
             self.isSpellingAutocorrectionEnabled &&
-            self.textDocumentProxy?.autocorrectionType ?? .Default != .No
+            self.textDocumentProxy?.autocorrectionType ?? .default != .no
     }
 
     internal func shouldCapitalizeSpelling() -> Bool {
         return
             self.shouldSuggestSpelling() &&
             self.isSpellingCapitalizationEnabled &&
-            self.textDocumentProxy?.autocorrectionType ?? .Default != .No
+            self.textDocumentProxy?.autocorrectionType ?? .default != .no
     }
 
-    private func lastWordFragmentRange(context: NSString) -> NSRange {
-        let lastSeparatorRange = context.rangeOfCharacterFromSet(NSCharacterSet.separatorChracterSet(), options: .BackwardsSearch)
+    private func lastWordFragmentRange(_ context: NSString) -> NSRange {
+        let lastSeparatorRange = context.rangeOfCharacter(from: .separatorChracterSet(), options: .backwards)
 
         if lastSeparatorRange.location == NSNotFound {
             return NSRange(location: 0, length: context.length)
@@ -96,7 +96,7 @@ public final class KeyboardSuggestionModel {
     public func query() -> KeyboardSuggestionQuery {
         let language = self.keyboardViewController?.keyboardLayout.language ?? "en"
         let context = self.textDocumentProxy?.documentContextBeforeInput ?? ""
-        let range = self.lastWordFragmentRange(context)
+        let range = self.lastWordFragmentRange(context as NSString)
 
         var query = KeyboardSuggestionQuery()
         query.language = language
@@ -105,7 +105,7 @@ public final class KeyboardSuggestionModel {
         return query
     }
 
-    internal func learnWord(word: String) {
+    internal func learnWord(_ word: String) {
         self.spellingSuggestionSource.learnWord(word.trim())
     }
 
@@ -133,7 +133,7 @@ public final class KeyboardSuggestionModel {
         self.updateGuesses()
     }
 
-    internal func applyGuest(guess: KeyboardSuggestionGuess, addSpace: Bool = false) {
+    internal func applyGuest(_ guess: KeyboardSuggestionGuess, addSpace: Bool = false) {
         guard self.guesses.contains(guess) else {
             return
         }
@@ -145,7 +145,7 @@ public final class KeyboardSuggestionModel {
 
         if let textDocumentProxy = self.textDocumentProxy {
             textDocumentProxy.performWithoutNotifications {
-                for _ in 0..<guess.query.placement.characters.count {
+                for _ in 0..<guess.query.placement.count {
                     textDocumentProxy.deleteBackward()
                 }
 
@@ -181,9 +181,9 @@ public final class KeyboardSuggestionModel {
             contextTailLength = 1
         }
 
-        let contextTailIndex = context.endIndex.advancedBy(-contextTailLength)
-        let contextTail = context.substringFromIndex(contextTailIndex)
-        let contextHead = context.substringToIndex(contextTailIndex)
+        let contextTailIndex = context.index(context.endIndex, offsetBy: -contextTailLength)
+        let contextTail = context[contextTailIndex...]
+        let contextHead = context[context.startIndex...contextTailIndex]
 
         guard contextHead.hasSuffix(guess.replacement) else {
             return
@@ -194,12 +194,12 @@ public final class KeyboardSuggestionModel {
         if let textDocumentProxy = self.textDocumentProxy {
             textDocumentProxy.performWithoutNotifications {
                 // TODO: Optimize replacement!
-                for _ in 0..<(guess.replacement.characters.count + contextTailLength) {
+                for _ in 0..<(guess.replacement.count + contextTailLength) {
                     textDocumentProxy.deleteBackward()
                 }
                 textDocumentProxy.insertText(guess.query.placement)
 
-                textDocumentProxy.insertText(contextTail)
+                textDocumentProxy.insertText(String(contextTail))
                 textDocumentProxy.insertText("\u{200B}") // ZERO WIDTH SPACE, fake symbol which will be removed by waiting backspace.
             }
         }
@@ -223,22 +223,22 @@ extension KeyboardSuggestionModel: KeyboardTextDocumentObserver {
         return !self.ignoreTextDocumentEvents
     }
 
-    public func keyboardTextDocumentWillInsertText(text: String) {
+    public func keyboardTextDocumentWillInsertText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
 
-        if NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
+        if (CharacterSet.separatorChracterSet() as NSCharacterSet).characterIsMember(text.utf16.first!) {
             self.separatorWillBeInsertedInTextDocument()
         }
     }
 
-    public func keyboardTextDocumentDidInsertText(text: String) {
+    public func keyboardTextDocumentDidInsertText(_ text: String) {
         guard !text.isEmpty else {
             return
         }
 
-        if !NSCharacterSet.separatorChracterSet().characterIsMember(text.utf16.first!) {
+        if !(CharacterSet.separatorChracterSet() as NSCharacterSet).characterIsMember(text.utf16.first!) {
             self.lastAppliedGuess = nil
         }
 

@@ -34,28 +34,5 @@ extension KeyboardKeyAppearanceVariant {
 }
 
 
-// # Equatable
-extension KeyboardKeyAppearanceVariant: Equatable {
-}
-
-public func ==(lhs: KeyboardKeyAppearanceVariant, rhs: KeyboardKeyAppearanceVariant) -> Bool {
-    return
-        lhs.keyType == rhs.keyType &&
-        lhs.keyColorType == rhs.keyColorType &&
-        lhs.popupType == rhs.popupType &&
-        lhs.keyMode == rhs.keyMode &&
-        lhs.keyboardMode == rhs.keyboardMode
-}
-
-
-// # Hashable
-extension KeyboardKeyAppearanceVariant: Hashable {
-    public var hashValue: Int {
-        return
-            self.keyType.hashValue +
-            self.keyColorType.hashValue << 4 +
-            self.popupType.hashValue << 8 +
-            self.keyMode.hashValue << 12 +
-            self.keyboardMode.hashValue << 16
-    }
-}
+extension KeyboardKeyAppearanceVariant: Equatable {}
+extension KeyboardKeyAppearanceVariant: Hashable {}

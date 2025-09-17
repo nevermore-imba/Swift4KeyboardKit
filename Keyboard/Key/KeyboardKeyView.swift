@@ -68,8 +68,8 @@ public class KeyboardKeyView: UIControl {
 
     private var contentVisible: Bool = true {
         didSet {
-            self.labelView.hidden = !self.contentVisible
-            self.contentView?.hidden = !self.contentVisible
+            self.labelView.isHidden = !self.contentVisible
+            self.contentView?.isHidden = !self.contentVisible
         }
     }
 
@@ -77,11 +77,11 @@ public class KeyboardKeyView: UIControl {
         didSet {
             for view in [self.displayView, self.borderView, self.underView, self.labelView] as [UIView?] {
                 view?.layer.shouldRasterize = shouldRasterize
-                view?.layer.rasterizationScale = UIScreen.mainScreen().scale
+                view?.layer.rasterizationScale = UIScreen.main.scale
             }
 
             self.labelView.layer.shouldRasterize = shouldRasterize
-            self.labelView.layer.rasterizationScale = UIScreen.mainScreen().scale
+            self.labelView.layer.rasterizationScale = UIScreen.main.scale
 
         }
     }
@@ -102,8 +102,8 @@ public class KeyboardKeyView: UIControl {
         }
         didSet {
             if let contentView = self.contentView {
-                contentView.contentMode = .ScaleAspectFit
-                contentView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+                contentView.contentMode = .scaleAspectFit
+                contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 contentView.frame = self.bounds
                 self.addSubview(contentView)
             }
@@ -123,7 +123,7 @@ public class KeyboardKeyView: UIControl {
 
         self.keyShape = KeyboardKeyShape()
 
-        self.shadowView.userInteractionEnabled = false
+        self.shadowView.isUserInteractionEnabled = false
         self.addSubview(self.shadowView)
         self.shadowView.layer.addSublayer(self.shadowLayer)
 
@@ -138,22 +138,22 @@ public class KeyboardKeyView: UIControl {
 
         self.addSubview(self.labelView)
 
-        self.displayView.opaque = false
-        self.underView?.opaque = false
-        self.borderView?.opaque = false
+        self.displayView.isOpaque = false
+        self.underView?.isOpaque = false
+        self.borderView?.isOpaque = false
 
         self.shadowLayer.shadowOpacity = Float(0.2)
         self.shadowLayer.shadowRadius = 4
         self.shadowLayer.shadowOffset = CGSize(width: 0, height: 3)
 
         self.borderView?.lineWidth = CGFloat(0.5)
-        self.borderView?.fillColor = UIColor.clearColor()
+        self.borderView?.fillColor = UIColor.clear
 
-        self.labelView.textAlignment = NSTextAlignment.Center
-        self.labelView.baselineAdjustment = UIBaselineAdjustment.AlignCenters
+        self.labelView.textAlignment = .center
+        self.labelView.baselineAdjustment = .alignCenters
         self.labelView.adjustsFontSizeToFitWidth = true
         self.labelView.minimumScaleFactor = CGFloat(0.1)
-        self.labelView.userInteractionEnabled = false
+        self.labelView.isUserInteractionEnabled = false
         self.labelView.numberOfLines = 1
     }
 
@@ -161,14 +161,14 @@ public class KeyboardKeyView: UIControl {
         fatalError("NSCoding not supported")
     }
 
-    public override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // This is simplified and optimised version of UIResponder's `hitTest`.
-        guard self.userInteractionEnabled && !self.hidden && self.alpha > 0 else {
+        guard self.isUserInteractionEnabled && !self.isHidden && self.alpha > 0 else {
             return nil
         }
 
         // Is this event inside our frame?
-        if self.pointInside(point, withEvent:event) {
+        if self.point(inside: point, with:event) {
             return self
         }
 
@@ -215,9 +215,9 @@ public class KeyboardKeyView: UIControl {
         let boundingView = self.displayView
 
         // Update shapes
-        self.keyShape.bounds = boundingView.convertRect(self.bounds, fromView: self)
+        self.keyShape.bounds = boundingView.convert(self.bounds, from: self)
         if let popupShape = self.popupShape, let popupView = self.popupView {
-            popupShape.bounds = boundingView.convertRect(popupView.bounds, fromView: popupView)
+            popupShape.bounds = boundingView.convert(popupView.bounds, from: popupView)
             fixIntersection(self.keyShape, second: popupShape)
         }
 
@@ -252,7 +252,7 @@ public class KeyboardKeyView: UIControl {
             let popupAndConnectorShape = KeyboardShape(shapes: [self.popupShape, self.connectorShape])
             compoundShape = KeyboardShape(shapes: [self.keyShape, popupAndConnectorShape])
 
-            self.shadowLayer.shadowPath = popupAndConnectorShape.fillPath.CGPath
+            self.shadowLayer.shadowPath = popupAndConnectorShape.fillPath.cgPath
         }
         else {
             compoundShape = self.keyShape
@@ -268,14 +268,14 @@ public class KeyboardKeyView: UIControl {
 
     func layoutPopupIfNeeded() {
         if self.popupView != nil {
-            self.shadowView.hidden = false
-            //self.borderView?.hidden = false
+            self.shadowView.isHidden = false
+            //self.borderView?.isHidden = false
 
             self.layoutPopup()
         }
         else {
-            self.shadowView.hidden = true
-            //self.borderView?.hidden = true
+            self.shadowView.isHidden = true
+            //self.borderView?.isHidden = true
         }
     }
 
@@ -293,7 +293,7 @@ public class KeyboardKeyView: UIControl {
     public func updateIfNeeded() {
         let needUpdateAppearance = self.needsUpdateKey || self.needsUpdateKeyboardMode || self.needsUpdateKeyMode
 
-        if let appearanceManager = self.appearanceManager where needUpdateAppearance {
+        if let appearanceManager = self.appearanceManager, needUpdateAppearance {
             self.appearance = appearanceManager.appearanceForVariant(self.appearanceVariant)
         }
 
@@ -427,7 +427,7 @@ public class KeyboardKeyView: UIControl {
         return self.key
     }
 
-    private func showPopupWithMode(mode: KeyboardKeyPopupTypeMode) {
+    private func showPopupWithMode(_ mode: KeyboardKeyPopupTypeMode) {
         self.hidePopup()
 
         let direction = self.appearance.popupDirection

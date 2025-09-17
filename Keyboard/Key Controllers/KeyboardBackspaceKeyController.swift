@@ -9,24 +9,23 @@
 import Foundation
 
 
-private let backspaceDelay = NSTimeInterval(0.5)
-private let backspaceRepeat = NSTimeInterval(0.07)
+private let backspaceDelay = TimeInterval(0.5)
+private let backspaceRepeat = TimeInterval(0.07)
 
 
 public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
 
-    private var delayTimer: NSTimer?
-    private var repeatTimer: NSTimer?
+    private var delayTimer: Timer?
+    private var repeatTimer: Timer?
 
-    public func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
+    public func keyViewDidSendEvents(controlEvents: UIControl.Event, keyView: KeyboardKeyView, key: KeyboardKey, keyboardMode: KeyboardMode) {
         guard key.type == .Backspace else {
             return
         }
 
-        if [.TouchDown].contains(controlEvents) {
+        if [.touchDown].contains(controlEvents) {
             self.keyDownHandler()
-        }
-        else if [.TouchDragExit, .TouchCancel, .TouchUpInside, .TouchUpOutside, .TouchDragOutside].contains(controlEvents) {
+        } else if [.touchDragExit, .touchCancel, .touchUpInside, .touchUpOutside, .touchDragOutside].contains(controlEvents) {
             self.keyUpHandler()
         }
     }
@@ -39,8 +38,13 @@ public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
         self.deleteBackward()
 
         self.cancelTimers()
-        self.delayTimer =
-            NSTimer.scheduledTimerWithTimeInterval(backspaceDelay - backspaceRepeat, target: self, selector: Selector("delayHandler"), userInfo: nil, repeats: false)
+        self.delayTimer = Timer.scheduledTimer(
+            timeInterval: backspaceDelay - backspaceRepeat,
+            target: self,
+            selector: #selector(delayHandler),
+            userInfo: nil,
+            repeats: false
+        )
     }
 
     private func keyUpHandler() {
@@ -54,14 +58,19 @@ public final class KeyboardBackspaceKeyController: KeyboardKeyListenerProtocol {
         self.repeatTimer = nil
     }
 
-    internal dynamic func delayHandler() {
+    @objc internal func delayHandler() {
         self.cancelTimers()
 
-        self.repeatTimer =
-            NSTimer.scheduledTimerWithTimeInterval(backspaceRepeat, target: self, selector: Selector("repeatHandler"), userInfo: nil, repeats: true)
+        self.repeatTimer = Timer.scheduledTimer(
+            timeInterval: backspaceRepeat,
+            target: self,
+            selector: #selector(repeatHandler),
+            userInfo: nil,
+            repeats: true
+        )
     }
 
-    internal dynamic func repeatHandler() {
+    @objc internal func repeatHandler() {
         self.deleteBackward()
         KeyboardSoundService.sharedInstance.playInputSound()
     }

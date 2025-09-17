@@ -8,10 +8,8 @@
 
 import Foundation
 
-private var keyboardKeyHashValueCounter = 0
-
-
 public struct KeyboardKey {
+    
     public var type: KeyboardKeyType = .Character
     public var colorType: KeyboardKeyColorType = .Regular
 
@@ -25,16 +23,14 @@ public struct KeyboardKey {
 
     public var alternateKeys: [KeyboardKey]?
 
-    public var tag: Int = 0
-
-    private var internalHashValue: Int
+    private let id: UUID
 }
 
 extension KeyboardKey {
+
     // # Initializers
     public init() {
-        self.internalHashValue = keyboardKeyHashValueCounter
-        keyboardKeyHashValueCounter += 1
+        id = UUID()
     }
 
     public init(character: Character) {
@@ -58,7 +54,7 @@ extension KeyboardKey {
         if let alternateCharacters = alternateCharacters {
             var characters: [Character] = []
             characters.append(character)
-            characters.appendContentsOf(alternateCharacters)
+            characters.append(contentsOf: alternateCharacters)
             self.alternateKeys = characters.map { KeyboardKey(character: $0) }
         }
     }
@@ -68,7 +64,7 @@ extension KeyboardKey {
         return self.output != nil
     }
 
-    public mutating func setLetter(letter: String) {
+    public mutating func setLetter(_ letter: String) {
         self.output = KeyboardKeyOutput(automated: letter)
         self.label = KeyboardKeyLabel(automated: letter)
     }
@@ -76,16 +72,14 @@ extension KeyboardKey {
 
 
 extension KeyboardKey: Hashable {
-    public var hashValue: Int { return self.internalHashValue }
-}
 
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        // FIXME: ADD ALL OF THEM!
+        return lhs.id == rhs.id && lhs.label == rhs.label
+    }
 
-extension KeyboardKey: Equatable {
-}
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 
-public func ==(lhs: KeyboardKey, rhs: KeyboardKey) -> Bool {
-    // FIXME: ADD ALL OF THEM!
-    return
-        lhs.hashValue == rhs.hashValue &&
-        lhs.label == rhs.label
 }

@@ -39,7 +39,11 @@ public class KeyboardViewController: UIViewController {
         }
     }
 
-    public var keyboardMode: KeyboardMode { didSet { self.keyboardModeDidSet(oldValue) } }
+    public var keyboardMode: KeyboardMode {
+        didSet {
+            self.keyboardModeDidSet(oldValue)
+        }
+    }
     public private(set) var listenerCoordinator: KeyboardKeyListenerCoordinator!
 
     public init(keyboardLayout: KeyboardLayout) {
@@ -67,7 +71,7 @@ public class KeyboardViewController: UIViewController {
         self.listenerCoordinator.addListener(KeyboardShiftController())
         self.listenerCoordinator.addListener(KeyboardPeriodShortcutController())
 
-        precondition(!self.isViewLoaded(), "Keyboard's view must not be loaded after `init()`.")
+        precondition(!self.isViewLoaded, "Keyboard's view must not be loaded after `init()`.")
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -84,19 +88,19 @@ public class KeyboardViewController: UIViewController {
         self.view = KeyboardView()
     }
 
-    public override func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         self.view.invalidateIntrinsicContentSize()
         self.establishKeyViews(pageNumber: self.pageNumber)
     }
 
-    public override func viewDidAppear(animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         KeyboardRegistry.sharedInstance.registerKeyboardViewController(self)
     }
 
-    public override func viewWillDisappear(animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         KeyboardRegistry.sharedInstance.unregisterKeyboardViewController(self)
         super.viewWillDisappear(animated)
     }
@@ -124,8 +128,8 @@ public class KeyboardViewController: UIViewController {
         //for view in self.keyViewSet.views { view.shouldRasterize = false }
     }
 
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    public override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         self.view.invalidateIntrinsicContentSize()
         self.view.setNeedsUpdateConstraints()
         self.view.setNeedsLayout()
@@ -133,7 +137,7 @@ public class KeyboardViewController: UIViewController {
 
     // # Private
 
-    private func establishKeyViews(pageNumber pageNumber: Int) {
+    private func establishKeyViews(pageNumber: Int) {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
 
@@ -151,7 +155,7 @@ public class KeyboardViewController: UIViewController {
         }
     }
 
-    private func establishKeyViews(page page: KeyboardPage, pageLayoutController: KeyboardPageLayoutController) {
+    private func establishKeyViews(page: KeyboardPage, pageLayoutController: KeyboardPageLayoutController) {
         // Setup `KeyboardPageLayoutController`.
         pageLayoutController.bounds = self.view.bounds
 
@@ -168,8 +172,8 @@ public class KeyboardViewController: UIViewController {
         }
 
         // Apply `hidden` property.
-        for view in self.keyViewPool.keyViews { view.hidden = true }
-        for view in self.keyViewSet.views { view.hidden = false }
+        for view in self.keyViewPool.keyViews { view.isHidden = true }
+        for view in self.keyViewSet.views { view.isHidden = false }
 
         self.updateKeyViewsIfNeeded()
 
@@ -204,7 +208,7 @@ public class KeyboardViewController: UIViewController {
         CATransaction.commit()
     }
 
-    private func retrieveKeyViewUsingPool(key key: KeyboardKey, frame: CGRect) -> KeyboardKeyView {
+    private func retrieveKeyViewUsingPool(key: KeyboardKey, frame: CGRect) -> KeyboardKeyView {
         if let keyView = self.keyViewPool.restore(size: frame.size, keyType: key.type) {
             keyView.prepareForReuse()
             keyView.frame.origin = frame.origin
@@ -216,7 +220,7 @@ public class KeyboardViewController: UIViewController {
         return keyView
     }
 
-    private func createAndRegisterKeyView(key key: KeyboardKey) -> KeyboardKeyView {
+    private func createAndRegisterKeyView(key: KeyboardKey) -> KeyboardKeyView {
         let keyView = KeyboardKeyView()
         keyView.appearanceManager = self.appearanceManager
         self.view.addSubview(keyView)
@@ -238,7 +242,7 @@ public class KeyboardViewController: UIViewController {
         CATransaction.commit()
     }
 
-    func keyboardModeDidSet(oldValue: KeyboardMode) {
+    func keyboardModeDidSet(_ oldValue: KeyboardMode) {
         guard self.keyboardMode != oldValue else {
             return
         }
@@ -266,7 +270,7 @@ public class KeyboardViewController: UIViewController {
 }
 
 extension KeyboardViewController: KeyboardTextDocumentObserver {
-    public func keyboardTextInputTraitsDidChange(textInputTraits: UITextInputTraits) {
+    public func keyboardTextInputTraitsDidChange(_ textInputTraits: UITextInputTraits) {
         self.updateKeyboardColorMode()
     }
 }

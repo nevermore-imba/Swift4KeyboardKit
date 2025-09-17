@@ -14,7 +14,7 @@ internal final class KeyboardEmojiSuggestionSource: KeyboardSuggestionSource {
     static let emojiMap: [String: [KeyboardEmoji]] = {
         var map = [String: [KeyboardEmoji]]()
 
-        func addEmoji(emoji: KeyboardEmoji, forKey key: String?) {
+        func addEmoji(_ emoji: KeyboardEmoji, forKey key: String?) {
             guard let key = key else {
                 return
             }
@@ -27,14 +27,14 @@ internal final class KeyboardEmojiSuggestionSource: KeyboardSuggestionSource {
         }
 
         for emoji in predefinedEmojis {
-            addEmoji(emoji, forKey: emoji.name?.lowercaseString)
+            addEmoji(emoji, forKey: emoji.name?.lowercased())
 
             for shortname in emoji.shortNames ?? [] {
-                addEmoji(emoji, forKey: shortname.lowercaseString)
+                addEmoji(emoji, forKey: shortname.lowercased())
             }
 
             for keyword in emoji.keywords ?? [] {
-                addEmoji(emoji, forKey: keyword.lowercaseString)
+                addEmoji(emoji, forKey: keyword.lowercased())
             }
         }
 
@@ -42,18 +42,18 @@ internal final class KeyboardEmojiSuggestionSource: KeyboardSuggestionSource {
     }()
 
 
-    func suggest(query: KeyboardSuggestionQuery, callback: KeyboardSuggestionSourceCallback) {
-        let keyword = query.placement.lowercaseString.trim()
+    func suggest(_ query: KeyboardSuggestionQuery, callback: KeyboardSuggestionSourceCallback) {
+        let keyword = query.placement.lowercased().trim()
 
         guard !keyword.isEmpty else {
             callback([])
             return
         }
 
-        let emojis = self.dynamicType.emojiMap[keyword] ?? []
+        let emojis = type(of: self).emojiMap[keyword] ?? []
 
         let guesses: [KeyboardSuggestionGuess] = emojis.map { emoji in
-            var guess = KeyboardSuggestionGuess(
+            let guess = KeyboardSuggestionGuess(
                 query: query,
                 type: .Emoji,
                 replacement: emoji.character

@@ -16,7 +16,7 @@ public enum KeyboardSizeMode: Int {
 
 extension KeyboardSizeMode {
     static func suitable() -> KeyboardSizeMode {
-        return UIDevice.currentDevice().userInterfaceIdiom == .Pad ? .Big : .Small
+        return UIDevice.current.userInterfaceIdiom == .pad ? .Big : .Small
     }
 }
 

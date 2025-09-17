@@ -35,7 +35,7 @@ extension KeyboardKeyImage {
         }
     }
 
-    public func view(keyboardMode keyboardMode: KeyboardMode, keyMode: KeyboardKeyMode) -> UIView {
+    public func view(keyboardMode: KeyboardMode, keyMode: KeyboardKeyMode) -> UIView {
         switch self {
         case .BackspaceImage:
             return KeyboardKeyBackspaceSymbolView()

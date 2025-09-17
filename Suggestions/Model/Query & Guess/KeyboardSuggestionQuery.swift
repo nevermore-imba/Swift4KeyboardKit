@@ -18,7 +18,7 @@ public struct KeyboardSuggestionQuery {
 
 extension KeyboardSuggestionQuery {
     public var placement: String {
-        return (context as NSString).substringWithRange(range) as String
+        return (context as NSString).substring(with: range) as String
     }
 }
 
@@ -27,17 +27,5 @@ extension KeyboardSuggestionQuery {
 extension KeyboardSuggestionQuery: Equatable {}
 
 public func ==(lhs: KeyboardSuggestionQuery, rhs: KeyboardSuggestionQuery) -> Bool {
-    return
-        lhs.context == rhs.context &&
-        lhs.range == rhs.range
-}
-
-
-// # NSRange Equatable
-extension NSRange: Equatable {}
-
-public func ==(lhs: NSRange, rhs: NSRange) -> Bool {
-    return
-        lhs.location == rhs.location &&
-        lhs.length == rhs.length
+    return lhs.context == rhs.context && NSEqualRanges(lhs.range, rhs.range)
 }

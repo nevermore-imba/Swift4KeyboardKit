@@ -9,14 +9,7 @@
 import UIKit
 
 
-extension CGRect: Hashable {
-    public var hashValue: Int {
-        get {
-            return (origin.x.hashValue ^ origin.y.hashValue ^ size.width.hashValue ^ size.height.hashValue)
-        }
-    }
-}
-
+extension CGRect: @retroactive Hashable {}
 
 extension CGRect {
     public func distanceTo(point: CGPoint) -> CGFloat {

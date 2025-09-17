@@ -10,30 +10,31 @@ import UIKit
 
 
 internal class KeyboardKeyEventTarget: NSObject {
+    
     private unowned var listenerCoordinator: KeyboardKeyListenerCoordinator
 
     internal init(listenerCoordinator: KeyboardKeyListenerCoordinator) {
         self.listenerCoordinator = listenerCoordinator
     }
 
-    internal func registerKeyView(keyView: KeyboardKeyView) {
+    internal func registerKeyView(_ keyView: KeyboardKeyView) {
         // Reasons: http://stackoverflow.com/questions/6131549/how-can-i-determine-which-uicontrolevents-type-caused-a-uievent
-        keyView.addTarget(self, action: "keyViewDidTouchDown:event:", forControlEvents: .TouchDown)
-        keyView.addTarget(self, action: "keyViewDidTouchDownRepeat:event:", forControlEvents: .TouchDownRepeat)
-        keyView.addTarget(self, action: "keyViewDidTouchDragInside:event:", forControlEvents: .TouchDragInside)
-        keyView.addTarget(self, action: "keyViewDidTouchDragOutside:event:", forControlEvents: .TouchDragOutside)
-        keyView.addTarget(self, action: "keyViewDidTouchDragEnter:event:", forControlEvents: .TouchDragEnter)
-        keyView.addTarget(self, action: "keyViewDidTouchDragExit:event:", forControlEvents: .TouchDragExit)
-        keyView.addTarget(self, action: "keyViewDidTouchUpInside:event:", forControlEvents: .TouchUpInside)
-        keyView.addTarget(self, action: "keyViewDidTouchUpOutside:event:", forControlEvents: .TouchUpOutside)
-        keyView.addTarget(self, action: "keyViewDidTouchCancel:event:", forControlEvents: .TouchCancel)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDown(_:event:)), for: .touchDown)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDownRepeat(_:event:)), for: .touchDownRepeat)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDragInside(_:event:)), for: .touchDragInside)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDragOutside(_:event:)), for: .touchDragOutside)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDragEnter(_:event:)), for: .touchDragEnter)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchDragExit(_:event:)), for: .touchDragExit)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchUpInside(_:event:)), for: .touchUpInside)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchUpOutside(_:event:)), for: .touchUpOutside)
+        keyView.addTarget(self, action: #selector(keyViewDidTouchCancel(_:event:)), for: .touchCancel)
     }
 
-    internal func unregisterKeyView(keyView: KeyboardKeyView) {
-        keyView.removeTarget(self, action: nil, forControlEvents: .AllEvents)
+    internal func unregisterKeyView(_ keyView: KeyboardKeyView) {
+        keyView.removeTarget(self, action: nil, for: .allEvents)
     }
 
-    internal func keyViewDidSendEvents(controlEvents: UIControlEvents, keyView: KeyboardKeyView, event: UIEvent) {
+    internal func keyViewDidSendEvents(_ controlEvents: UIControl.Event, keyView: KeyboardKeyView, event: UIEvent) {
         self.listenerCoordinator.keyViewDidSendControlEvents(
             controlEvents,
             keyView: keyView,
@@ -42,40 +43,40 @@ internal class KeyboardKeyEventTarget: NSObject {
     }
 
     // # keyViewDidTouch*'s
-    internal dynamic func keyViewDidTouchDown(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDown, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDown(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDown, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchDownRepeat(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDownRepeat, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDownRepeat(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDownRepeat, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchDragInside(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDragInside, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDragInside(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDragInside, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchDragOutside(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDragOutside, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDragOutside(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDragOutside, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchDragEnter(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDragEnter, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDragEnter(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDragEnter, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchDragExit(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchDragExit, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchDragExit(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchDragExit, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchUpInside(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchUpInside, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchUpInside(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchUpInside, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchUpOutside(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchUpOutside, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchUpOutside(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchUpOutside, keyView: keyView, event: event)
     }
 
-    internal dynamic func keyViewDidTouchCancel(keyView: KeyboardKeyView, event: UIEvent) {
-        self.keyViewDidSendEvents(.TouchCancel, keyView: keyView, event: event)
+    @objc internal func keyViewDidTouchCancel(_ keyView: KeyboardKeyView, event: UIEvent) {
+        self.keyViewDidSendEvents(.touchCancel, keyView: keyView, event: event)
     }
 
 }

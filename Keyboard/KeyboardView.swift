@@ -10,31 +10,31 @@ import UIKit
 
 internal final class KeyboardView: UIView {
 
-    override static func requiresConstraintBasedLayout() -> Bool {
+    override class var requiresConstraintBasedLayout: Bool {
         return true
     }
 
     var touchToView: [UITouch:UIView]
-    
+
     override init(frame: CGRect) {
         self.touchToView = [:]
-        
+
         super.init(frame: frame)
-        
-        self.contentMode = UIViewContentMode.Redraw
-        self.multipleTouchEnabled = true
-        self.userInteractionEnabled = true
-        self.opaque = false
+
+        self.contentMode = .redraw
+        self.isMultipleTouchEnabled = true
+        self.isUserInteractionEnabled = true
+        self.isOpaque = false
     }
 
     required init?(coder: NSCoder) {
         fatalError("NSCoding not supported")
     }
 
-    override func intrinsicContentSize() -> CGSize {
-        let interfaceOrientation = UIApplication.🚀sharedApplication().statusBarOrientation
-        let isPad = UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
-        let actualScreenWidth = (UIScreen.mainScreen().nativeBounds.size.width / UIScreen.mainScreen().nativeScale)
+    override var intrinsicContentSize: CGSize {
+        let interfaceOrientation = UIApplication.shared.statusBarOrientation
+        let isPad = UIDevice.current.userInterfaceIdiom == .pad
+        let actualScreenWidth = (UIScreen.main.nativeBounds.size.width / UIScreen.main.nativeScale)
         let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(interfaceOrientation.isPortrait && actualScreenWidth >= 400 ? 226 : 216))
         let canonicalLandscapeHeight = (isPad ? CGFloat(352) : CGFloat(162))
         let canonicalHeight = interfaceOrientation.isPortrait ? canonicalPortraitHeight : canonicalLandscapeHeight
@@ -45,45 +45,46 @@ internal final class KeyboardView: UIView {
     // then some weird optimization happens on UIKit's side where tapping down on a transparent pixel will
     // not actually recognize the touch. Having a manual drawRect fixes this behavior, even though it doesn't
     // actually do anything.
-    override func drawRect(rect: CGRect) {}
+    override func draw(_ rect: CGRect) {
 
-    override func hitTest(point: CGPoint, withEvent event: UIEvent!) -> UIView? {
-        guard !self.hidden && self.alpha > 0 && self.userInteractionEnabled else {
+    }
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard !self.isHidden && self.alpha > 0 && self.isUserInteractionEnabled else {
             return nil
         }
 
         return self.bounds.contains(point) ? self : nil
     }
 
-    func handleControl(view: UIView?, controlEvent: UIControlEvents, event: UIEvent?) {
+    func handleControl(_ view: UIView?, controlEvent: UIControl.Event, event: UIEvent?) {
         guard let controlView = view as? UIControl else {
             return
         }
 
-        for target in controlView.allTargets() {
-            guard let actions = controlView.actionsForTarget(target, forControlEvent: controlEvent) else {
+        for target in controlView.allTargets {
+            guard let actions = controlView.actions(forTarget: target, forControlEvent: controlEvent) else {
                 continue
             }
-
-            for action in actions {
-                controlView.sendAction(Selector(action), to: target, forEvent: event)
+            actions.forEach {
+                controlView.sendAction(Selector($0), to: target, for: event)
             }
         }
     }
 
-    func findNearestView(position: CGPoint) -> UIView? {
+    func findNearestView(_ position: CGPoint) -> UIView? {
         guard self.bounds.contains(position) else {
             return nil
         }
-        
+
         var closest: (view: UIView, distance: CGFloat)!
-        
+
         for view in self.subviews {
-            guard !view.hidden else {
+            guard !view.isHidden else {
                 continue
             }
 
-            let distance = view.frame.distanceTo(position)
+            let distance = view.frame.distanceTo(point: position)
 
             if closest == nil || closest.distance > distance {
                 closest = (view: view, distance: distance)
@@ -99,13 +100,13 @@ internal final class KeyboardView: UIView {
 
     func resetTrackedViews() {
         for view in self.touchToView.values {
-            self.handleControl(view, controlEvent: .TouchCancel, event: nil)
+            self.handleControl(view, controlEvent: .touchCancel, event: nil)
         }
 
-        self.touchToView.removeAll(keepCapacity: true)
+        self.touchToView.removeAll(keepingCapacity: true)
     }
 
-    func ownView(newTouch: UITouch, viewToOwn: UIView?) -> Bool {
+    func ownView(_ newTouch: UITouch, viewToOwn: UIView?) -> Bool {
         var foundView = false
 
         if viewToOwn != nil {
@@ -127,34 +128,34 @@ internal final class KeyboardView: UIView {
         return foundView
     }
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let position = touch.locationInView(self)
+            let position = touch.location(in: self)
             let view = findNearestView(position)
-            
+
             let viewChangedOwnership = self.ownView(touch, viewToOwn: view)
-            
+
             if !viewChangedOwnership {
-                self.handleControl(view, controlEvent: .TouchDown, event: event)
-                
+                self.handleControl(view, controlEvent: .touchDown, event: event)
+
                 if touch.tapCount > 1 {
                     // two events, I think this is the correct behavior but I have not tested with an actual UIControl
-                    self.handleControl(view, controlEvent: .TouchDownRepeat, event: event)
+                    self.handleControl(view, controlEvent: .touchDownRepeat, event: event)
                 }
             }
         }
     }
 
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            let position = touch.locationInView(self)
-            
+            let position = touch.location(in: self)
+
             let oldView = self.touchToView[touch]
             var newView: UIView?
 
             if oldView != nil {
-                let point = touch.locationInView(oldView!)
-                let hitView = oldView!.hitTest(point, withEvent: event)
+                let point = touch.location(in: oldView!)
+                let hitView = oldView!.hitTest(point, with: event)
 
                 if hitView != nil {
                     newView = oldView
@@ -164,45 +165,45 @@ internal final class KeyboardView: UIView {
             newView = newView ?? findNearestView(position)
 
             if oldView != newView {
-                self.handleControl(oldView, controlEvent: .TouchDragExit, event: event)
-                
+                self.handleControl(oldView, controlEvent: .touchDragExit, event: event)
+
                 let viewChangedOwnership = self.ownView(touch, viewToOwn: newView)
-                
+
                 if !viewChangedOwnership {
-                    self.handleControl(newView, controlEvent: .TouchDragEnter, event: event)
+                    self.handleControl(newView, controlEvent: .touchDragEnter, event: event)
                 }
                 else {
-                    self.handleControl(newView, controlEvent: .TouchDragInside, event: event)
+                    self.handleControl(newView, controlEvent: .touchDragInside, event: event)
                 }
             }
             else {
-                self.handleControl(oldView, controlEvent: .TouchDragInside, event: event)
+                self.handleControl(oldView, controlEvent: .touchDragInside, event: event)
             }
         }
     }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let view = self.touchToView[touch]
-            
-            let touchPosition = touch.locationInView(self)
-            
+
+            let touchPosition = touch.location(in: self)
+
             if self.bounds.contains(touchPosition) {
-                self.handleControl(view, controlEvent: .TouchUpInside, event: event)
+                self.handleControl(view, controlEvent: .touchUpInside, event: event)
             }
             else {
-                self.handleControl(view, controlEvent: .TouchCancel, event: event)
+                self.handleControl(view, controlEvent: .touchCancel, event: event)
             }
 
             self.touchToView[touch] = nil
         }
     }
 
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>?, with event: UIEvent?) {
         if let touches = touches {
             for touch in touches {
                 let view = self.touchToView[touch]
-                self.handleControl(view, controlEvent: .TouchCancel, event: event)
+                self.handleControl(view, controlEvent: .touchCancel, event: event)
                 self.touchToView[touch] = nil
             }
         }

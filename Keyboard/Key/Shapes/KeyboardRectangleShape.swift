@@ -15,8 +15,6 @@ private let fourZeroFloats: [CGFloat] = [0.0, 0.0, 0.0, 0.0]
 private let fourZeroPoints = [CGPointZero, CGPointZero, CGPointZero, CGPointZero]
 private let emptySegmentPoints: KeyboardShapeSegmentPoints = (begin: CGPointZero, end: CGPointZero)
 private let fourZeroSegmentPoints: [KeyboardShapeSegmentPoints] = [emptySegmentPoints, emptySegmentPoints, emptySegmentPoints, emptySegmentPoints]
-private let pi = CGFloat(M_PI)
-
 
 internal class KeyboardRectangleShape: KeyboardShape {
 
@@ -47,9 +45,9 @@ internal class KeyboardRectangleShape: KeyboardShape {
         self.startingPoints[2] = origin + CGPoint(x: segmentSize.width, y: 0)
         self.startingPoints[3] = origin + CGPoint(x: segmentSize.width, y: segmentSize.height)
 
-        self.arcStartingAngles[0] = pi / 2
-        self.arcStartingAngles[2] = -pi / 2
-        self.arcStartingAngles[1] = pi
+        self.arcStartingAngles[0] = .pi / 2
+        self.arcStartingAngles[2] = -.pi / 2
+        self.arcStartingAngles[1] = .pi
         self.arcStartingAngles[3] = 0
 
         for i in fourRange {
@@ -104,14 +102,14 @@ internal class KeyboardRectangleShape: KeyboardShape {
                 // TODO: figure out if this is ncessary
                 if prevPoint == nil {
                     prevPoint = segmentPoint.0
-                    fillPath.moveToPoint(prevPoint!)
+                    fillPath.move(to: prevPoint!)
                 }
 
-                fillPath.addLineToPoint(segmentPoint.0)
-                fillPath.addLineToPoint(segmentPoint.1)
+                fillPath.addLine(to: segmentPoint.0)
+                fillPath.addLine(to: segmentPoint.1)
 
-                edgePath!.moveToPoint(segmentPoint.0)
-                edgePath!.addLineToPoint(segmentPoint.1)
+                edgePath!.move(to: segmentPoint.0)
+                edgePath!.addLine(to: segmentPoint.1)
 
                 prevPoint = segmentPoint.1
             }
@@ -124,60 +122,60 @@ internal class KeyboardRectangleShape: KeyboardShape {
 
                 if prevPoint == nil {
                     prevPoint = segmentPoint.1
-                    fillPath.moveToPoint(prevPoint!)
+                    fillPath.move(to: prevPoint!)
                 }
 
                 let startAngle = self.arcStartingAngles[(i + 1) % 4]
-                let endAngle = startAngle + pi / 2
+                let endAngle = startAngle + .pi / 2
                 let arcCenter = self.arcCenters[(i + 1) % 4]
 
-                fillPath.addLineToPoint(prevPoint!)
-                fillPath.addArcWithCenter(arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+                fillPath.addLine(to: prevPoint!)
+                fillPath.addArc(withCenter: arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
-                edgePath!.moveToPoint(prevPoint!)
-                edgePath!.addArcWithCenter(arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+                edgePath!.move(to: prevPoint!)
+                edgePath!.addArc(withCenter: arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
                 prevPoint = self.segmentPoints[(i + 1) % 4].0
             }
 
 
             if let edgePath = edgePath {
-                edgePath.applyTransform(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
+                edgePath.apply(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
                 edgePaths.append(edgePath)
             }
         }
 
-        fillPath.closePath()
-        fillPath.applyTransform(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
+        fillPath.close()
+        fillPath.apply(CGAffineTransformMakeTranslation(-self.underOffset.x, -self.underOffset.y))
 
         if self.hasUnderPath {
             let underPath = UIBezierPath()
 
-            underPath.moveToPoint(self.segmentPoints[2].1)
+            underPath.move(to: self.segmentPoints[2].1)
 
             var startAngle = self.arcStartingAngles[3]
-            var endAngle = startAngle + CGFloat(M_PI/2.0)
-            underPath.addArcWithCenter(self.arcCenters[3], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
+            var endAngle = startAngle + CGFloat(.pi/2.0)
+            underPath.addArc(withCenter: self.arcCenters[3], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
-            underPath.addLineToPoint(self.segmentPoints[3].1)
+            underPath.addLine(to: self.segmentPoints[3].1)
 
             startAngle = self.arcStartingAngles[0]
-            endAngle = startAngle + CGFloat(M_PI/2.0)
-            underPath.addArcWithCenter(self.arcCenters[0], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
+            endAngle = startAngle + CGFloat(.pi/2.0)
+            underPath.addArc(withCenter: self.arcCenters[0], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
-            underPath.addLineToPoint(self.segmentPoints[0].0 - self.underOffset)
+            underPath.addLine(to: self.segmentPoints[0].0 - self.underOffset)
 
             startAngle = self.arcStartingAngles[1]
-            endAngle = startAngle - CGFloat(M_PI/2.0)
-            underPath.addArcWithCenter(self.arcCenters[0] - self.underOffset, radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
+            endAngle = startAngle - CGFloat(.pi/2.0)
+            underPath.addArc(withCenter: self.arcCenters[0] - self.underOffset, radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
 
-            underPath.addLineToPoint(CGPoint(x: self.segmentPoints[2].1.x - self.cornerRadius, y: self.segmentPoints[2].1.y + self.cornerRadius) - self.underOffset)
+            underPath.addLine(to: CGPoint(x: self.segmentPoints[2].1.x - self.cornerRadius, y: self.segmentPoints[2].1.y + self.cornerRadius) - self.underOffset)
 
             startAngle = self.arcStartingAngles[0]
-            endAngle = startAngle - CGFloat(M_PI/2.0)
-            underPath.addArcWithCenter(self.arcCenters[3] - self.underOffset, radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
+            endAngle = startAngle - CGFloat(.pi/2.0)
+            underPath.addArc(withCenter: self.arcCenters[3] - self.underOffset, radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
             
-            underPath.closePath()
+            underPath.close()
             
             self.underPath = underPath
         }
@@ -185,7 +183,7 @@ internal class KeyboardRectangleShape: KeyboardShape {
         let compoundEdgePath = UIBezierPath()
 
         for edgePath in edgePaths {
-            compoundEdgePath.appendPath(edgePath)
+            compoundEdgePath.append(edgePath)
         }
 
         self.fillPath = fillPath
@@ -206,7 +204,7 @@ internal class KeyboardRectangleShape: KeyboardShape {
 
 
 
-func fixIntersection(first: KeyboardRectangleShape, second: KeyboardRectangleShape) {
+func fixIntersection(_ first: KeyboardRectangleShape, second: KeyboardRectangleShape) {
     var firstRect = first.bounds
     var secondRect = second.bounds
 
@@ -218,10 +216,9 @@ func fixIntersection(first: KeyboardRectangleShape, second: KeyboardRectangleSha
 
     let amount = intersection.height + 8.0
     let ratio = CGFloat(1)
-    var tempRect = CGRectZero
 
-    CGRectDivide(firstRect, &tempRect, &firstRect, (amount * ratio).rounded(), .MinYEdge)
-    CGRectDivide(secondRect, &tempRect, &secondRect, (amount * (1 - ratio)).rounded(), .MaxYEdge)
+    (_, firstRect) = firstRect.divided(atDistance: (amount * ratio).rounded(), from: .minYEdge)
+    (_, secondRect) = secondRect.divided(atDistance: (amount * (1 - ratio)).rounded(), from: .maxYEdge)
 
     first.bounds = firstRect
     second.bounds = secondRect

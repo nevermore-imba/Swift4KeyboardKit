@@ -8,14 +8,11 @@
 
 import Foundation
 
-
-private var dispatchOnceToken: dispatch_once_t = 0
-
 private var enablesNotifications = true
 private var enablesDefaultBehaviour = true
 
-private var textDocumentWillInsertText: ((text: String) -> Void)?
-private var textDocumentDidInsertText: ((text: String) -> Void)?
+private var textDocumentWillInsertText: ((_ text: String) -> Void)?
+private var textDocumentDidInsertText: ((_ text: String) -> Void)?
 private var textDocumentWillDeleteBackward: (() -> Void)?
 private var textDocumentDidDeleteBackward: (() -> Void)?
 
@@ -62,16 +59,16 @@ public final class KeyboardTextDocumentCoordinator {
             CATransaction.commit()
         })
 
-        self.swizzleAll()
+         self.swizzleAll()
     }
 
     // # Public
 
-    public func addObserver(observer: KeyboardTextDocumentObserver) {
+    public func addObserver(_ observer: KeyboardTextDocumentObserver) {
         self.observers.insert(observer)
     }
 
-    public func removeObserver(observer: KeyboardTextDocumentObserver) {
+    public func removeObserver(_ observer: KeyboardTextDocumentObserver) {
         self.observers.remove(observer)
     }
 
@@ -88,7 +85,7 @@ public final class KeyboardTextDocumentCoordinator {
     // # Dispatch
 
     // keyboardTextDocument(Will/Did)InsertText()
-    internal func dispatchKeyboardTextDocumentWillInsertText(text: String) {
+    internal func dispatchKeyboardTextDocumentWillInsertText(_ text: String) {
         log("keyboardTextDocumentWillInsertText(\"\(text)\")")
         for observer in self.observers {
             guard observer.observesTextDocumentEvents else { continue }
@@ -96,7 +93,7 @@ public final class KeyboardTextDocumentCoordinator {
         }
     }
 
-    internal func dispatchKeyboardTextDocumentDidInsertText(text: String) {
+    internal func dispatchKeyboardTextDocumentDidInsertText(_ text: String) {
         log("keyboardTextDocumentDidInsertText(\"\(text)\")")
         for observer in self.observers {
             guard observer.observesTextDocumentEvents else { continue }
@@ -148,12 +145,12 @@ public final class KeyboardTextDocumentCoordinator {
             return
         }
 
-        dispatch_once(&dispatchOnceToken) {
-            self.swizzleInsertText(textDocumentProxy)
-            self.swizzleDeleteBackward(textDocumentProxy)
+        _DispatchOnce.run {
+            self.swizzleInsertText(textDocumentProxy: textDocumentProxy)
+            self.swizzleDeleteBackward(textDocumentProxy: textDocumentProxy)
 
-            self.swizzleTextWillChange(inputViewController)
-            self.swizzleTextDidChange(inputViewController)
+            self.swizzleTextWillChange(inputViewController: inputViewController)
+            self.swizzleTextDidChange(inputViewController: inputViewController)
         }
     }
 
@@ -169,25 +166,29 @@ public final class KeyboardTextDocumentCoordinator {
             self.dispatchKeyboardTextDocumentDidInsertText(text)
         }
 
-        let type = textDocumentProxy.dynamicType
-        let originalMethod = class_getInstanceMethod(type, Selector("insertText:"))
+        let target = type(of: textDocumentProxy)
+        let action = Selector(("originalInsertText:"))
 
-        let swizzledImplementation: @convention(c) (NSObject, Selector, String) -> Void = { (_self, _cmd, text) in
-            textDocumentWillInsertText?(text: text)
+        guard let originalMethod = class_getInstanceMethod(
+            target,
+            #selector(UITextDocumentProxy.insertText(_:))
+        ) else { return }
+
+        let swizzledImplementation: @convention(block) (NSObject, Selector, String) -> Void = { _self, _cmd, text in
+            textDocumentWillInsertText?(text)
             if isPreventingDefault { isPreventingDefault = false; return }
-            _self.performSelector("originalInsertText:", withObject: text)
-            textDocumentDidInsertText?(text: text)
+            _self.perform(action, with: text)
+            textDocumentDidInsertText?(text)
         }
 
-        let originalImplementation =
-            method_setImplementation(
-                originalMethod,
-                unsafeBitCast(swizzledImplementation, IMP.self)
-            )
+        let originalImplementation = method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
+        )
 
         class_addMethod(
-            type,
-            "originalInsertText:",
+            target,
+            action,
             originalImplementation,
             method_getTypeEncoding(originalMethod)
         )
@@ -205,25 +206,32 @@ public final class KeyboardTextDocumentCoordinator {
             self.dispatchTextDocumentDidDeleteBackward()
         }
 
-        let type = textDocumentProxy.dynamicType
-        let originalMethod = class_getInstanceMethod(type, Selector("deleteBackward"))
+        let target = type(of: textDocumentProxy)
+        let action = Selector(("originalDeleteBackward"))
 
-        let swizzledImplementation: @convention(c) (NSObject, Selector) -> Void = { (_self, _cmd) in
+        guard let originalMethod = class_getInstanceMethod(target, #selector(UITextDocumentProxy.deleteBackward)) else {
+            return
+        }
+
+        let swizzledImplementation: @convention(block) (NSObject, Selector) -> Void = { (_self, _cmd) in
             textDocumentWillDeleteBackward?()
-            if isPreventingDefault { isPreventingDefault = false; return }
-            _self.performSelector("originalDeleteBackward")
+            if isPreventingDefault {
+                isPreventingDefault = false
+                return
+            }
+            _self.perform(action)
             textDocumentDidDeleteBackward?()
         }
 
         let originalImplementation =
-            method_setImplementation(
-                originalMethod,
-                unsafeBitCast(swizzledImplementation, IMP.self)
-            )
+        method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
+        )
 
         class_addMethod(
-            type,
-            "originalDeleteBackward",
+            target,
+            action,
             originalImplementation,
             method_getTypeEncoding(originalMethod)
         )
@@ -236,23 +244,25 @@ public final class KeyboardTextDocumentCoordinator {
             self.dispatchTextWillChange()
         }
 
-        let type = inputViewController.dynamicType
-        let originalMethod = class_getInstanceMethod(type, Selector("textWillChange:"))
+        let target = type(of: inputViewController)
+        let action = Selector(("originalTextWillChange:"))
 
-        let swizzledImplementation: @convention(c) (NSObject, Selector, AnyObject) -> Void = { (_self, _cmd, textInput) in
-            _self.performSelector(Selector("originalTextWillChange:"), withObject: textInput)
+        guard let originalMethod = class_getInstanceMethod(target, #selector(UIInputViewController.textWillChange(_:))) else { return }
+
+        let swizzledImplementation: @convention(block) (NSObject, Selector, AnyObject) -> Void = { (_self, _cmd, textInput) in
+            _self.perform(action, with: textInput)
             textWillChange?()
         }
 
         let originalImplementation =
-            method_setImplementation(
-                originalMethod,
-                unsafeBitCast(swizzledImplementation, IMP.self)
+        method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
         )
 
         class_addMethod(
-            type,
-            Selector("originalTextWillChange:"),
+            target,
+            action,
             originalImplementation,
             method_getTypeEncoding(originalMethod)
         )
@@ -265,23 +275,26 @@ public final class KeyboardTextDocumentCoordinator {
             self.dispatchTextDidChange()
         }
 
-        let type = inputViewController.dynamicType
-        let originalMethod = class_getInstanceMethod(type, Selector("textDidChange:"))
+        let target = type(of: inputViewController)
+        let action = Selector(("originalTextDidChange:"))
 
-        let swizzledImplementation: @convention(c) (NSObject, Selector, AnyObject) -> Void = { (_self, _cmd, textInput) in
-            _self.performSelector(Selector("originalTextDidChange:"), withObject: textInput)
+        guard let originalMethod = class_getInstanceMethod(target, #selector(UIInputViewController.textDidChange(_:))) else {
+            return
+        }
+
+        let swizzledImplementation: @convention(block) (NSObject, Selector, AnyObject) -> Void = { (_self, _cmd, textInput) in
+            _self.perform(action, with: textInput)
             textDidChange?()
         }
 
-        let originalImplementation =
-            method_setImplementation(
-                originalMethod,
-                unsafeBitCast(swizzledImplementation, IMP.self)
-            )
+        let originalImplementation = method_setImplementation(
+            originalMethod,
+            unsafeBitCast(swizzledImplementation, to: IMP.self)
+        )
 
         class_addMethod(
-            type,
-            Selector("originalTextDidChange:"),
+            target,
+            action,
             originalImplementation,
             method_getTypeEncoding(originalMethod)
         )

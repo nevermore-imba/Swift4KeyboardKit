@@ -27,7 +27,7 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
     }
 
     internal var highlightedKey: KeyboardKey? {
-        return self.alternateKeyViews.filter { $0.highlighted }.first?.key
+        return self.alternateKeyViews.filter { $0.isHighlighted }.first?.key
     }
 
     internal override func intrinsicFrame() -> CGRect {
@@ -60,7 +60,7 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
             self.addSubview(alternateKeyView)
         }
 
-        self.alternateKeyViews.first!.highlighted = true
+        self.alternateKeyViews.first!.isHighlighted = true
     }
 
     private var keyMargin: CGPoint {
@@ -71,7 +71,7 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
         return CGPoint(x: LayoutConstants.popupWidthIncrement / CGFloat(2), y: 8)
     }
 
-    override func sizeThatFits(baseSize: CGSize) -> CGSize {
+    override func sizeThatFits(_ baseSize: CGSize) -> CGSize {
         let paddingX = self.keyMargin.x
 
         let width = self.alternateKeyViews.reduce(0.0) { (width, alternateKeyView) -> CGFloat in
@@ -81,8 +81,8 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
         return CGSize(width: width, height: baseSize.height)
     }
 
-    override func intrinsicContentSize() -> CGSize {
-        return self.sizeThatFits(super.intrinsicContentSize())
+    override var intrinsicContentSize: CGSize {
+        return self.sizeThatFits(super.intrinsicContentSize)
     }
 
     override func layoutSubviews() {
@@ -106,28 +106,29 @@ internal final class KeyboardKeyAlternateKeysPopupView: KeyboardKeyPopupView {
     }
 
     func addTargets() {
-        self.keyView!.addTarget(self, action: #selector(self.keyViewDidTouchDragInside(_:event:)), forControlEvents: .TouchDragInside)
-        self.keyView!.addTarget(self, action: #selector(self.keyViewDidTouchUpInside(_:event:)), forControlEvents: .TouchUpInside)
+        self.keyView?.addTarget(self, action: #selector(keyViewDidTouchDragInside(_:event:)), for: .touchDragInside)
+        self.keyView?.addTarget(self, action: #selector(keyViewDidTouchUpInside(_:event:)), for: .touchUpInside)
     }
 
     func removeTargets() {
-        self.keyView?.removeTarget(self, action: nil, forControlEvents: [.TouchDragInside, .TouchUpInside])
+        self.keyView?.removeTarget(self, action: nil, for: [.touchDragInside, .touchUpInside])
     }
 
-    internal dynamic func keyViewDidTouchDragInside(keyView: KeyboardKeyView, event: UIEvent?) {
-        guard let touch = event?.allTouches()?.first else {
+    @objc internal func keyViewDidTouchDragInside(_ keyView: KeyboardKeyView, event: UIEvent?) {
+        guard let touch = event?.allTouches?.first else {
             return
         }
 
-        let point = touch.locationInView(self)
+        let point = touch.location(in: self)
 
         for alternateKeyView in self.alternateKeyViews {
             let frame = alternateKeyView.frame
-            alternateKeyView.highlighted = point.x > frame.minX && point.x < frame.maxX
+            alternateKeyView.isHighlighted = point.x > frame.minX && point.x < frame.maxX
         }
     }
 
-    internal dynamic func keyViewDidTouchUpInside(keyView: KeyboardKeyView, event: UIEvent?) {
+    @objc internal func keyViewDidTouchUpInside(_ keyView: KeyboardKeyView, event: UIEvent?) {
+
     }
 
 }
